@@ -22,6 +22,7 @@ dependencies:
   http: ^0.12.0+2
   url_launcher: ^5.2.3
   scrollable_bottom_sheet: ^0.2.1
+  provider: ^3.1.0+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -1,15 +1,23 @@
+import 'dart:core';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'dart:core';
-import 'dart:convert';
-import 'model.dart';
+import 'package:esports/model/matchmodel.dart';
+import 'package:esports/model/model.dart';
+import 'package:esports/model/tournamentmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+  MultiProvider(
+    providers: [
+      ChangeNotifierProvider(builder: (context) => MatchModel()),
+      ChangeNotifierProvider(builder: (context) => TournamentModel()),
+    ],
+    child: EsportsApp()
+  )
+);
 
-class MyApp extends StatelessWidget {
+class EsportsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,42 +27,21 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Color(0xFF00adb5),
         accentColor: Color(0xFF00adb5),
       ),
-      home: MyHomePage(title: 'Esports'),
+      home: EsportsPage(title: 'Esports'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class EsportsPage extends StatefulWidget {
+  EsportsPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _EsportsPageState createState() => _EsportsPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
-
-  // Get token from the asset file
-  static get getToken async => await rootBundle.loadString("assets/apikey.txt");
-
-  // Access token
-  static String accessToken;
-  
-  // API URL for current matches 
-  static final currentMatchesUrl = "https://api.pandascore.co/matches/running";
-  
-  // API URL for today matches
-  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming";
-  
-  // API URL for a specific match
-  static matchUrl(id) => "https://api.pandascore.co/matches/$id/";
-
-  // API URL for a specific match
-  static tournamentUrl(id) => "https://api.pandascore.co/tournaments/$id/";
-
-  // API URL for current tournaments
-  static final currentTournaments = "https://api.pandascore.co/tournaments/running";
+class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStateMixin {
 
   // Current date and time
   static DateTime now = DateTime.now();
@@ -62,29 +49,17 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   // Get today's date in the API format
   static get today => "${now.year}-${now.month}-${now.day}";
 
-  // HTTP Client
-  Client http = Client();
-
-  // Live matches
-  List<Match> _liveMatches = [];
-
-  // Today matches
-  List<Match> _todayMatches = [];
-
-  // Current consulted match
-  Match _match;
-
-  // Current consulted tournament
-  Tournament _tournament;
-
-  // Current tournaments
-  List<Tournament> _tournaments = [];
-
   // Tabs controller
   TabController _tabController;
 
   // Tab index
   int _index = 0;
+
+  MatchModel get matches => Provider.of<MatchModel>(context, listen: false);
+
+  TournamentModel get tournaments => Provider.of<TournamentModel>(context, listen: false);
+
+  Widget teamLogo(String url, double size) => url != null ? SizedBox(width: size, height: size, child: Image.network(url),) : SizedBox(width: size, height: size);
 
   // Launch a URL
   _launch(String url) async {
@@ -95,65 +70,11 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     }
   }
 
-  // Get live matches from the API
-  Future getLiveMatches() async {
-    setState(() => _liveMatches.clear());
-    _liveMatches = await getMatches(currentMatchesUrl);
-    setState((){});
-  }
-
-  // Get today matches from the API
-  Future getTodayMatches() async {
-    setState(() => _todayMatches.clear());
-    _todayMatches = (await getMatches(todayMatchesUrl)).reversed.toList();
-    setState((){});
-  }
-
-  // Get current tournaments from the  API
-  Future getCurrentTournaments() async {
-    setState(() => _tournaments.clear());
-    Iterable l = await getRequest(currentTournaments);
-    _tournaments = l.map((i) => Tournament.fromJson(i)).toList();
-  }
-
-  // Get a list of matches from the API
-  Future<List<Match>> getMatches(String url) async {
-    Iterable l = await getRequest(url);
-    return l.map((i) => Match.fromJson(i)).toList();
-  }
-
-  // Get specific match from the API
-  Future getMatch(int id) async {
-    setState(() => _match = null);
-    _match = Match.fromJson(await getRequest(matchUrl(id)));
-  }
-
-  // Get specific tournament from the API
-  Future getTournament(int id) async {
-    setState(() => _tournament = null);
-    _tournament = Tournament.fromJson(await getRequest(tournamentUrl(id)));
-  }
-
-
-  // GET request to the API for a single object or a list
-  Future<dynamic> getRequest(String url) async {
-    var res;
-    try {
-      final response = await http.get(url, headers: { 'Authorization': accessToken });
-      if(response.statusCode == 200) {
-        res = json.decode(response.body);
-      }
-    } catch(_) {
-      http.close();
-    } 
-    return res;
-  }
-
-  Widget teamLogo(String url, double size) => url != null ? SizedBox(width: size, height: size, child: Image.network(url),) : SizedBox(width: size, height: size);
-
   // Open a specific match in a bottom sheet
   openMatch(int id) async {
-    if(_match == null || id != _match.id) await getMatch(id);
+    var _match = matches.match;
+    if(_match == null || id != _match.id) 
+      _match = await matches.getMatch(id);
     showModalBottomSheet(
       context: context,
       elevation: 4,
@@ -217,7 +138,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   }
 
   openTournament(int id) async {
-    if(_tournament == null || id != _tournament.id) await getTournament(id);
+    var _tournament = tournaments.current;
+    if(_tournament == null || id != _tournament.id) 
+      _tournament = await tournaments.getTournament(id);
     showModalBottomSheet(
       context: context,
       elevation: 4,
@@ -284,6 +207,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       }
     );
   }
+  
+  initApiData() async {
+    await API.initToken();
+    await matches.getLiveMatches();
+    await matches.getTodayMatches();
+    await tournaments.getCurrentTournaments();
+  }
 
   @override
   void initState() {
@@ -293,13 +223,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       if(_tabController.index != _index) setState((){ _index = _tabController.index; });
     });
     initApiData();
-  }
-
-  initApiData() async {
-    accessToken = "Bearer ${await getToken}";
-    await getLiveMatches();
-    await getTodayMatches();
-    await getCurrentTournaments();
   }
 
   @override
@@ -353,7 +276,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                       FlatButton.icon(
                         icon: Icon(Icons.refresh, color: Colors.grey,),
                         label: Text("Refresh", style: TextStyle(color: Colors.grey),),
-                        onPressed: getLiveMatches,
+                        onPressed: matches.getLiveMatches,
                       )
                     ],
                   ),
@@ -362,7 +285,8 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: <Widget>[
-                    if(_liveMatches != null && _liveMatches.isNotEmpty) for(Match match in _liveMatches) 
+                    if(matches.live != null && matches.live.isNotEmpty) 
+                      for(Match match in matches.live) 
                     Padding(
                       padding: const EdgeInsets.only(left: 8, bottom: 4),
                       child: GestureDetector(
@@ -412,7 +336,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    if(_todayMatches.isNotEmpty) for(Match match in _todayMatches)
+                    if(matches.today.isNotEmpty) for(Match match in matches.today)
                     GestureDetector(
                       onTap: () => openMatch(match.id),
                       child: Container(
@@ -490,7 +414,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                   padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   child: Text("Tournaments", style: TextStyle(fontSize: 38),),
               ),
-              for(var t in _tournaments)
+              for(var t in tournaments.currents)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 4),
                   child: GestureDetector(
