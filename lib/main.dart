@@ -353,6 +353,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
                               elevation: 3,
                               child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 8),
                                 width: 150,
                                 child: Column(
                                   children: <Widget>[
@@ -360,12 +361,19 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                     Text(match.videogame.name, style: TextStyle(fontSize: 18,)),
                                     Text(match.tournament.name),
                                     SizedBox(height: 12,),
-                                    teamLogo(match.opponents[0].opponent.imageUrl, 30),
-                                    Text(match.opponents[0].opponent.name, style: TextStyle(fontSize: 16,)),
-                                    Text((match.results[0].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
-                                    Text((match.results[1].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
-                                    Text(match.opponents[1].opponent.name, style: TextStyle(fontSize: 16,)),
-                                    teamLogo(match.opponents[1].opponent.imageUrl, 30),
+                                    for(var i = 0; i < match.opponents.length; i++)
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Row(children: <Widget>[
+                                            teamLogo(match.opponents[i].opponent.imageUrl, 30),
+                                            SizedBox(width: 4,),
+                                            Text(match.opponents[i].opponent.name, 
+                                              overflow: TextOverflow.fade,
+                                              style: TextStyle(fontSize: 16,)),
+                                          ],),
+                                        Text((match.results[i].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
+                                      ],),
                                     SizedBox(height: 8,),
                                   ],
                                 ),
