@@ -38,8 +38,15 @@ class LiveMatchModel with ChangeNotifier {
 }
 
 class TodayMatchModel with ChangeNotifier {
+
+  // Current date and time
+  static DateTime now = DateTime.now();
+  
+  // Get today's date in the API format
+  static get today => "${now.year}-${now.month}-${now.day}";
+
   // API URL for today matches
-  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming";
+  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming?sort=begin_at&range[begin_at]=$today,$today";
 
   // Today matches
   List<Match> list = [];
@@ -47,7 +54,7 @@ class TodayMatchModel with ChangeNotifier {
   // Get today matches from the API
   Future fetch() async {
     list.clear();
-    list = (await MatchModel.getMatches(todayMatchesUrl)).reversed.toList();
+    list = (await MatchModel.getMatches(todayMatchesUrl))..removeWhere((match) => match.opponents.length < 2);
     notifyListeners();
   }
 }

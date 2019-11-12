@@ -50,13 +50,7 @@ class EsportsPage extends StatefulWidget {
 }
 
 class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStateMixin {
-
-  // Current date and time
-  static DateTime now = DateTime.now();
   
-  // Get today's date in the API format
-  static get today => "${now.year}-${now.month}-${now.day}";
-
   // Tabs controller
   TabController _tabController;
 
@@ -376,11 +370,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                 borderRadius: BorderRadius.all(Radius.circular(16.0))),
                               elevation: 3,
                               child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8),
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 width: 175,
                                 child: Column(
                                   children: <Widget>[
-                                    SizedBox(height: 8,),
+                                    SizedBox(height: 10,),
                                     Text(match.videogame.name, style: TextStyle(fontSize: 18,)),
                                     Text(match.tournament.name),
                                     SizedBox(height: 12,),
@@ -397,7 +391,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                           ],),
                                         Text((match.results[i].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
                                       ],),
-                                    SizedBox(height: 8,),
+                                    SizedBox(height: 10,),
                                   ],
                                 ),
                               ),
