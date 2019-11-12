@@ -62,6 +62,12 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
 
   Widget teamLogo(String url, double size) => url != null ? SizedBox(width: size, height: size, child: Image.network(url),) : SizedBox(width: size, height: size);
 
+  Widget get loadingCircle => Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 166,
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(strokeWidth: 1,),);
+
   // Launch a URL
   _launch(String url) async {
     if (await canLaunch(url)) {
@@ -211,11 +217,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
 
   SliverStickyHeader tournamentSliver(String name, List<dynamic> list){
     return SliverStickyHeader(
-      header: Container(
+      header: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Text(name, style: TextStyle(fontSize: 36),),
+        child: Text(name, style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
       ),
-      sliver: SliverList(
+      sliver: list.isNotEmpty ? SliverList(
         delegate: SliverChildBuilderDelegate((context, index){
           var t = list[index];
             return Padding(
@@ -251,7 +257,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           },
           childCount: list.length
         ),
-      ),
+      ) : SliverToBoxAdapter(child: loadingCircle,),
     );
   }
   
@@ -314,8 +320,8 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
             CustomScrollView(
             slivers: [
                 // LIVE SECTION
-                SliverToBoxAdapter(
-                  child: Padding(
+                SliverStickyHeader(
+                  header: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Row(
                       children: <Widget>[
@@ -328,138 +334,138 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                       ],
                     ),
                   ),
-                ),
-                SliverToBoxAdapter(
+                  sliver: SliverToBoxAdapter(
                   child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: <Widget>[
-                      if(matches.live != null && matches.live.isNotEmpty) 
-                        for(Match match in matches.live) 
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8, bottom: 4),
-                        child: GestureDetector(
-                          onTap: () => openMatch(match.id),
+                    scrollDirection: Axis.horizontal,
+                    child: Consumer<MatchModel>(
+                    builder: (context, model, child) => Row(
+                      children: <Widget>[
+                        if(model.live != null && model.live.isNotEmpty) 
+                          for(Match match in model.live) 
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8, bottom: 4),
+                          child: GestureDetector(
+                            onTap: () => openMatch(match.id),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                              elevation: 3,
+                              child: Container(
+                                width: 150,
+                                child: Column(
+                                  children: <Widget>[
+                                    SizedBox(height: 8,),
+                                    Text(match.videogame.name, style: TextStyle(fontSize: 18,)),
+                                    Text(match.tournament.name),
+                                    SizedBox(height: 12,),
+                                    teamLogo(match.opponents[0].opponent.imageUrl, 30),
+                                    Text(match.opponents[0].opponent.name, style: TextStyle(fontSize: 16,)),
+                                    Text((match.results[0].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
+                                    Text((match.results[1].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
+                                    Text(match.opponents[1].opponent.name, style: TextStyle(fontSize: 16,)),
+                                    teamLogo(match.opponents[1].opponent.imageUrl, 30),
+                                    SizedBox(height: 8,),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ) else loadingCircle
+
+                      ],
+                    ),
+                ),
+                  ),
+                ),
+              ),
+              Consumer<MatchModel>(
+                  builder: (context, model, child) => SliverStickyHeader(
+                  header: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                  ),
+                  sliver: matches.today.isNotEmpty ? SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                    var match = model.today[index];
+                      return GestureDetector(
+                        onTap: () => openMatch(match.id),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width - 16,
+                          margin: EdgeInsets.only(bottom: 8, left: 8, right: 8),
                           child: Card(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                                borderRadius: BorderRadius.all(Radius.circular(16.0))),
                             elevation: 3,
-                            child: Container(
-                              width: 150,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  SizedBox(height: 8,),
-                                  Text(match.videogame.name, style: TextStyle(fontSize: 18,)),
-                                  Text(match.tournament.name),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                    Column(children: <Widget>[
+                                      Text(match.videogame.name, style: TextStyle(fontSize: 16),),
+                                      Text(match.tournament.name, style: TextStyle(fontSize: 12),),
+                                    ],),
+                                    Container(
+                                      margin: EdgeInsets.symmetric(horizontal: 8),
+                                      width: 1,
+                                      height: 32,
+                                      color: Theme.of(context).accentColor),
+                                    Text(match.beginAt.substring(11, 16), 
+                                    style: TextStyle(fontSize: 24)),
+                                  ],),
                                   SizedBox(height: 12,),
-                                  teamLogo(match.opponents[0].opponent.imageUrl, 30),
-                                  Text(match.opponents[0].opponent.name, style: TextStyle(fontSize: 16,)),
-                                  Text((match.results[0].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
-                                  Text((match.results[1].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
-                                  Text(match.opponents[1].opponent.name, style: TextStyle(fontSize: 16,)),
-                                  teamLogo(match.opponents[1].opponent.imageUrl, 30),
-                                  SizedBox(height: 8,),
+                                  if(match.opponents.length == 2) Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                    Expanded(
+                                      child: Column(children: <Widget>[
+                                        Text(match.opponents[0].opponent.name, 
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 18)),
+                                        ...[SizedBox(height: 4,),
+                                        teamLogo(match.opponents[0].opponent.imageUrl, 54)]
+                                      ],),
+                                    ),
+                                    Text("VS", 
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 24)),
+                                    Expanded(
+                                      child: Column(children: <Widget>[
+                                          Text(match.opponents[1].opponent.name, 
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(fontSize: 18)),
+                                          ...[SizedBox(height: 4,),
+                                          teamLogo(match.opponents[1].opponent.imageUrl, 54)]
+                                        ],
+                                      ),
+                                    ),
+                                  ],),
+                                  SizedBox(height: 4,),
                                 ],
                               ),
                             ),
                           ),
                         ),
-                      ) else Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 166,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).secondaryHeaderColor)),),
-
-                    ],
-                  ),
-              ),
+                      );
+                  },
+                  childCount: matches.today.length
                 ),
-              // TODAY SECTION
-              SliverToBoxAdapter(
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
-                ),
-              ),
-              if(matches.today.isNotEmpty) SliverList(delegate: SliverChildBuilderDelegate((context, index) {
-                var match = matches.today[index];
-                    return GestureDetector(
-                      onTap: () => openMatch(match.id),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 16,
-                        margin: EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                          elevation: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                  Column(children: <Widget>[
-                                    Text(match.videogame.name, style: TextStyle(fontSize: 16),),
-                                    Text(match.tournament.name, style: TextStyle(fontSize: 12),),
-                                  ],),
-                                  Container(
-                                    margin: EdgeInsets.symmetric(horizontal: 8),
-                                    width: 1,
-                                    height: 32,
-                                    color: Theme.of(context).accentColor),
-                                  Text(match.beginAt.substring(11, 16), 
-                                  style: TextStyle(fontSize: 24)),
-                                ],),
-                                SizedBox(height: 12,),
-                                if(match.opponents.length == 2) Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                  Expanded(
-                                    child: Column(children: <Widget>[
-                                      Text(match.opponents[0].opponent.name, 
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 18)),
-                                      ...[SizedBox(height: 4,),
-                                      teamLogo(match.opponents[0].opponent.imageUrl, 54)]
-                                    ],),
-                                  ),
-                                  Text("VS", 
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 24)),
-                                  Expanded(
-                                    child: Column(children: <Widget>[
-                                        Text(match.opponents[1].opponent.name, 
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(fontSize: 18)),
-                                        ...[SizedBox(height: 4,),
-                                        teamLogo(match.opponents[1].opponent.imageUrl, 54)]
-                                      ],
-                                    ),
-                                  ),
-                                ],),
-                                SizedBox(height: 4,),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                },
-                childCount: matches.today.length
-              ),)
+                ) : SliverToBoxAdapter(child: loadingCircle,)
+            ),
+              )
+               
           ],),
           // TOURNAMENTS TAB
           CustomScrollView(
             slivers: [
               Consumer<TournamentModel>(
-                builder: (context, model, child) => tournamentSliver("Ongoing", tournaments.ongoing)
+                builder: (context, model, child) => tournamentSliver("Ongoing", model.ongoing) 
               ),
               Consumer<TournamentModel>(
-                builder: (context, model, child) => tournamentSliver("Upcoming", tournaments.upcoming)
+                builder: (context, model, child) => tournamentSliver("Upcoming", model.upcoming) 
               ),
             ]
           ),
