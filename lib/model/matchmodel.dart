@@ -23,7 +23,7 @@ class MatchModel with ChangeNotifier {
   // Get a list of matches from the API
   Future<List<Match>> getMatches(String url) async {
     Iterable l = await API.getRequest(url);
-    return l.map((i) => Match.fromJson(i)).toList();
+    return (l ?? []).map((i) => Match.fromJson(i)).toList();
   }
 
   // Get specific match from the API

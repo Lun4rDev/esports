@@ -207,12 +207,46 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
       }
     );
   }
+
+  tournamentCard(Tournament t){
+    return Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: GestureDetector(
+                    onTap: () => openTournament(t.id),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 16,
+                      margin: EdgeInsets.only(bottom: 8, left: 8, right: 8),
+                      child: Card(
+                        elevation: 3.3,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              teamLogo(t.league.imageUrl, 70),
+                              Column(
+                                children: <Widget>[
+                                  Text(t.videogame.name, style: TextStyle(fontSize: 18)),
+                                  Text(t.league.name),
+                                ],
+                              ),
+                              Text(t.beginAt.substring(5, 10), style: TextStyle(fontSize: 24),)
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+  }
   
   initApiData() async {
     await API.initToken();
     await matches.getLiveMatches();
     await matches.getTodayMatches();
-    await tournaments.getCurrentTournaments();
+    await tournaments.getOngoingTournaments();
+    await tournaments.getUpcomingTournaments();
   }
 
   @override
@@ -405,46 +439,37 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
               ),)
           ],),
           // TOURNAMENTS TAB
-          SingleChildScrollView(
-            child: Column(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                  child: Text("Tournaments", style: TextStyle(fontSize: 38),),
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Text("Ongoing", style: TextStyle(fontSize: 36),),
+                ),
               ),
-              for(var t in tournaments.currents)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: GestureDetector(
-                    onTap: () => openTournament(t.id),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 16,
-                      margin: EdgeInsets.only(bottom: 8, left: 8, right: 8),
-                      child: Card(
-                        elevation: 3.3,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              teamLogo(t.league.imageUrl, 70),
-                              Column(
-                                children: <Widget>[
-                                  Text(t.videogame.name, style: TextStyle(fontSize: 18)),
-                                  Text(t.league.name),
-                                ],
-                              ),
-                              Text(t.beginAt.substring(5, 10), style: TextStyle(fontSize: 24),)
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index){
+                    return tournamentCard(tournaments.ongoing[index]);
+                  },
+                  childCount: tournaments.ongoing.length
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Text("Upcoming", style: TextStyle(fontSize: 36),),
+                ),
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index){
+                    return tournamentCard(tournaments.upcoming[index]);
+                  },
+                  childCount: tournaments.upcoming.length
+                ),
+              ),
+
             ]
-          ),)
+          ),
         ],
         ),
       ),
