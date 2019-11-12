@@ -11,10 +11,15 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 void main() => runApp(
   MultiProvider(
     providers: [
+      // Match models providers
       ChangeNotifierProvider(builder: (context) => MatchModel()),
       ChangeNotifierProvider(builder: (context) => LiveMatchModel()),
       ChangeNotifierProvider(builder: (context) => TodayMatchModel()),
+
+      // Tournament models providers
       ChangeNotifierProvider(builder: (context) => TournamentModel()),
+      ChangeNotifierProvider(builder: (context) => OngoingTournamentModel()),
+      ChangeNotifierProvider(builder: (context) => UpcomingTournamentModel()),
     ],
     child: EsportsApp()
   )
@@ -58,14 +63,15 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   // Tab index
   int _index = 0;
 
-  // Provider models
+  // Match models providers
   MatchModel get match => Provider.of<MatchModel>(context, listen: false);
-
   LiveMatchModel get liveMatches => Provider.of<LiveMatchModel>(context, listen: false);
-
   TodayMatchModel get todayMatches => Provider.of<TodayMatchModel>(context, listen: false);
 
-  TournamentModel get tournaments => Provider.of<TournamentModel>(context, listen: false);
+  // Tournament models providers
+  TournamentModel get tournament => Provider.of<TournamentModel>(context, listen: false);
+  OngoingTournamentModel get ongoingTournaments => Provider.of<OngoingTournamentModel>(context, listen: false);
+  UpcomingTournamentModel get upcomingTournaments => Provider.of<UpcomingTournamentModel>(context, listen: false);
 
   // Sized square logo fetched from the web
   Widget teamLogo(String url, double size) => url != null 
@@ -158,9 +164,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   }
 
   openTournament(int id) async {
-    var _tournament = tournaments.current;
-    if(_tournament == null || id != _tournament.id) 
-      _tournament = await tournaments.getTournament(id);
+    tournament.fetch(id);
     showModalBottomSheet(
       context: context,
       elevation: 4,
@@ -168,65 +172,69 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
       builder: (BuildContext context){
         return SingleChildScrollView(
           dragStartBehavior: DragStartBehavior.down,
-          child: Container(
-            margin: EdgeInsets.all(16),
-            child: Column(
-              children: <Widget>[
-                Text(_tournament.videogame.name, style: TextStyle(fontSize: 16),),
-                SizedBox(height: 4,),
-                Text(_tournament.serie.name ?? _tournament.league.name, style: TextStyle(fontSize: 14),),
-                SizedBox(height: 4,),
-                Text(_tournament.name, style: TextStyle(fontSize: 14),),
-                SizedBox(height: 4,),
-                ...[teamLogo(_tournament.league.imageUrl, 80),
-                  SizedBox(height: 4,),],
-                if(_tournament.prizepool != null) 
-                  ...[Text(_tournament.prizepool, style: TextStyle(fontSize: 14),),
-                  SizedBox(height: 4,)],
-                SizedBox(height: 16,),
-                Text(_tournament.beginAt.substring(5, 10), 
-                  style: TextStyle(fontSize: 24)),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: <Widget>[
-                      for(var team in _tournament.teams)
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8),
-                          child: Column(
-                            children: <Widget>[
-                              teamLogo(team.imageUrl, 50),
-                              Text(team.name)
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                // TODO: Rosters
-                // TODO : Matches
-                // Matches doesn't seem to have relevant data in the free plan ?
-                /*SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: <Widget>[
-                      for(var match in _tournament.)
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 8),
-                          child: Card(
+          child: Consumer<TournamentModel>(
+            builder: (context, model, child) {  
+              return Container(
+              margin: EdgeInsets.all(16),
+              child: model.current != null && model.current.id == id ? Column(
+                children: <Widget>[
+                  Text(model.current.videogame.name, style: TextStyle(fontSize: 16),),
+                  SizedBox(height: 4,),
+                  Text(model.current.serie.name ?? model.current.league.name, style: TextStyle(fontSize: 14),),
+                  SizedBox(height: 4,),
+                  Text(model.current.name, style: TextStyle(fontSize: 14),),
+                  SizedBox(height: 4,),
+                  ...[teamLogo(model.current.league.imageUrl, 80),
+                    SizedBox(height: 4,),],
+                  if(model.current.prizepool != null) 
+                    ...[Text(model.current.prizepool, style: TextStyle(fontSize: 14),),
+                    SizedBox(height: 4,)],
+                  SizedBox(height: 16,),
+                  Text(tournament.current.beginAt.substring(5, 10), 
+                    style: TextStyle(fontSize: 24)),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: <Widget>[
+                        for(var team in tournament.current.teams)
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                               children: <Widget>[
-                                
+                                teamLogo(team.imageUrl, 50),
+                                Text(team.name)
                               ],
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),*/
-              ]
-            )
-          )
+                  // TODO: Rosters
+                  // TODO : Matches
+                  // Matches doesn't seem to have relevant data in the free plan ?
+                  /*SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: <Widget>[
+                        for(var match in tournament.current.)
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            child: Card(
+                              child: Column(
+                                children: <Widget>[
+                                  
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),*/
+                ]
+              ) : loadingCircle
+            );
+            },
+          ) 
         );
       }
     );
@@ -282,8 +290,8 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     await API.initToken();
     await liveMatches.fetch();
     await todayMatches.fetch();
-    await tournaments.getOngoingTournaments();
-    await tournaments.getUpcomingTournaments();
+    await ongoingTournaments.fetch();
+    await upcomingTournaments.fetch();
   }
 
   @override
@@ -486,11 +494,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           // TOURNAMENTS TAB
           CustomScrollView(
             slivers: [
-              Consumer<TournamentModel>(
-                builder: (context, model, child) => tournamentSliver("Ongoing", model.ongoing) 
+              Consumer<OngoingTournamentModel>(
+                builder: (context, model, child) => tournamentSliver("Ongoing", model.list) 
               ),
-              Consumer<TournamentModel>(
-                builder: (context, model, child) => tournamentSliver("Upcoming", model.upcoming) 
+              Consumer<UpcomingTournamentModel>(
+                builder: (context, model, child) => tournamentSliver("Upcoming", model.list) 
               ),
             ]
           ),
