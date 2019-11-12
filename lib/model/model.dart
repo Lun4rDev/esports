@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
-
 class API {
   // Get token from the asset file
   static get getToken async => await rootBundle.loadString("assets/apikey.txt");
@@ -14,11 +13,12 @@ class API {
   static Future<dynamic> getRequest(String url) async {
     var res;
     try {
-      final response = await http.get(url, headers: { 'Authorization': accessToken });
-      if(response.statusCode == 200) {
+      final response =
+          await http.get(url, headers: {'Authorization': accessToken});
+      if (response.statusCode == 200) {
         res = json.decode(response.body);
       }
-    } catch(_) {}
+    } catch (_) {}
     return res;
   }
 
@@ -101,8 +101,7 @@ class Match {
       });
     }
     id = json['id'];
-    league =
-        json['league'] != null ? League.fromJson(json['league']) : null;
+    league = json['league'] != null ? League.fromJson(json['league']) : null;
     leagueId = json['league_id'];
     live = json['live'] != null ? Live.fromJson(json['live']) : null;
     liveUrl = json['live_url'];
@@ -135,9 +134,7 @@ class Match {
         ? Videogame.fromJson(json['videogame'])
         : null;
     videogameVersion = json['videogame_version'];
-    winner = json["winner"] != null
-      ? Opponent.fromJson(json["winner"])
-      : null;
+    winner = json["winner"] != null ? Opponent.fromJson(json["winner"]) : null;
     winnerId = json['winner_id'];
   }
 
@@ -233,8 +230,7 @@ class Games {
     position = json['position'];
     status = json['status'];
     videoUrl = json['video_url'];
-    winner =
-        json['winner'] != null ? Winner.fromJson(json['winner']) : null;
+    winner = json['winner'] != null ? Winner.fromJson(json['winner']) : null;
     winnerType = json['winner_type'];
   }
 
@@ -348,9 +344,8 @@ class Opponents {
   Opponents({this.opponent, this.type});
 
   Opponents.fromJson(Map<String, dynamic> json) {
-    opponent = json['opponent'] != null
-        ? Opponent.fromJson(json['opponent'])
-        : null;
+    opponent =
+        json['opponent'] != null ? Opponent.fromJson(json['opponent']) : null;
     type = json['type'];
   }
 
@@ -559,9 +554,6 @@ class Videogame {
   }
 }
 
-
-
-
 class Tournament {
   String beginAt;
   String endAt;
@@ -602,8 +594,7 @@ class Tournament {
     beginAt = json['begin_at'];
     endAt = json['end_at'];
     id = json['id'];
-    league =
-        json['league'] != null ? League.fromJson(json['league']) : null;
+    league = json['league'] != null ? League.fromJson(json['league']) : null;
     leagueId = json['league_id'];
     if (json['matches'] != null) {
       matches = List<Matches>();

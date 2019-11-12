@@ -2,15 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:esports/model/model.dart';
 
 class TournamentModel with ChangeNotifier {
-
   // API URL for a specific match
   static tournamentUrl(id) => "https://api.pandascore.co/tournaments/$id/";
 
   // API URL for ongoing tournaments
-  static final ongoingTournaments = "https://api.pandascore.co/tournaments/running";
-  
+  static final ongoingTournaments =
+      "https://api.pandascore.co/tournaments/running";
+
   // API URL for upcoming tournaments
-  static final upcomingTournaments = "https://api.pandascore.co/tournaments/upcoming";
+  static final upcomingTournaments =
+      "https://api.pandascore.co/tournaments/upcoming";
 
   // Currently consulted tournament
   Tournament current;

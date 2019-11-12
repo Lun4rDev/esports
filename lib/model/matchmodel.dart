@@ -2,12 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:esports/model/model.dart';
 
 class MatchModel with ChangeNotifier {
-  // API URL for current matches 
+  // API URL for current matches
   static final currentMatchesUrl = "https://api.pandascore.co/matches/running";
-  
+
   // API URL for today matches
   static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming";
-  
+
   // API URL for a specific match
   static matchUrl(id) => "https://api.pandascore.co/matches/$id/";
 

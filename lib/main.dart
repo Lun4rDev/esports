@@ -60,7 +60,9 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
 
   TournamentModel get tournaments => Provider.of<TournamentModel>(context, listen: false);
 
-  Widget teamLogo(String url, double size) => url != null ? SizedBox(width: size, height: size, child: Image.network(url),) : SizedBox(width: size, height: size);
+  Widget teamLogo(String url, double size) => url != null 
+    ? SizedBox(width: size, height: size, child: Image.network(url),) 
+    : SizedBox(width: size, height: size);
 
   Widget get loadingCircle => Container(
                           width: MediaQuery.of(context).size.width,
