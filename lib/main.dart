@@ -12,6 +12,8 @@ void main() => runApp(
   MultiProvider(
     providers: [
       ChangeNotifierProvider(builder: (context) => MatchModel()),
+      ChangeNotifierProvider(builder: (context) => LiveMatchModel()),
+      ChangeNotifierProvider(builder: (context) => TodayMatchModel()),
       ChangeNotifierProvider(builder: (context) => TournamentModel()),
     ],
     child: EsportsApp()
@@ -56,14 +58,21 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   // Tab index
   int _index = 0;
 
-  MatchModel get matches => Provider.of<MatchModel>(context, listen: false);
+  // Provider models
+  MatchModel get match => Provider.of<MatchModel>(context, listen: false);
+
+  LiveMatchModel get liveMatches => Provider.of<LiveMatchModel>(context, listen: false);
+
+  TodayMatchModel get todayMatches => Provider.of<TodayMatchModel>(context, listen: false);
 
   TournamentModel get tournaments => Provider.of<TournamentModel>(context, listen: false);
 
+  // Sized square logo fetched from the web
   Widget teamLogo(String url, double size) => url != null 
     ? SizedBox(width: size, height: size, child: Image.network(url),) 
     : SizedBox(width: size, height: size);
 
+  // Loading animation
   Widget get loadingCircle => Container(
     width: MediaQuery.of(context).size.width,
     height: 166,
@@ -81,9 +90,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
 
   // Open a specific match in a bottom sheet
   openMatch(int id) async {
-    var _match = matches.match;
-    if(_match == null || id != _match.id) 
-      _match = await matches.getMatch(id);
+    match.fetch(id);
     showModalBottomSheet(
       context: context,
       elevation: 4,
@@ -93,52 +100,56 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           dragStartBehavior: DragStartBehavior.down,
           child: Container(
             margin: EdgeInsets.all(16),
-            child: Column(
-              children: <Widget>[
-                Text(_match.videogame.name, style: TextStyle(fontSize: 16),),
-                SizedBox(height: 4,),
-                Text(_match.tournament.name, style: TextStyle(fontSize: 14),),
-                SizedBox(height: 16,),
-                Text(_match.beginAt.substring(11, 16), 
-                  style: TextStyle(fontSize: 24)),
-                SizedBox(height: 16,),
-                if(_match.opponents.length == 2) Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Text(_match.opponents[0].opponent.name, 
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18)),
-                        teamLogo(_match.opponents[0].opponent.imageUrl, 100),
-                      ],
+            child: Consumer<MatchModel>(
+              builder: (context, _match, child) { 
+                return _match.current != null && _match.current.id == id ? Column(
+                children: <Widget>[
+                  Text(_match.current.videogame.name, style: TextStyle(fontSize: 16),),
+                  SizedBox(height: 4,),
+                  Text(_match.current.tournament.name, style: TextStyle(fontSize: 14),),
+                  SizedBox(height: 16,),
+                  Text(_match.current.beginAt.substring(11, 16), 
+                    style: TextStyle(fontSize: 24)),
+                  SizedBox(height: 16,),
+                  if(_match.current.opponents.length == 2) Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Text(_match.current.opponents[0].opponent.name, 
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18)),
+                          teamLogo(_match.current.opponents[0].opponent.imageUrl, 100),
+                        ],
+                      ),
                     ),
-                  ),
-                  Text("VS", 
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20)),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Text(_match.opponents[1].opponent.name, 
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18)),
-                        teamLogo(_match.opponents[1].opponent.imageUrl, 100),
-                      ],
+                    Text("VS", 
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20)),
+                    Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Text(_match.current.opponents[1].opponent.name, 
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18)),
+                          teamLogo(_match.current.opponents[1].opponent.imageUrl, 100),
+                        ],
+                      ),
                     ),
-                  ),
-                ],),
-                SizedBox(height: 32,),
-                if(_match.liveUrl != null)
-                  Container(
-                    child: OutlineButton(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                      child: Text(_match.liveUrl.replaceFirst("https://", "")),
-                      onPressed: () => _launch(_match.liveUrl),
-                    ),
-                  )
-              ],
+                  ],),
+                  SizedBox(height: 32,),
+                  if(_match.current.liveUrl != null)
+                    Container(
+                      child: OutlineButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                        child: Text(_match.current.liveUrl.replaceFirst("https://", "")),
+                        onPressed: () => _launch(_match.current.liveUrl),
+                      ),
+                    )
+                ],
+              ) : loadingCircle;
+              },
             ),
           ),
         );
@@ -192,23 +203,27 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                     ],
                   ),
                 ),
-                SingleChildScrollView(
+                // TODO: Rosters
+                // TODO : Matches
+                // Matches doesn't seem to have relevant data in the free plan ?
+                /*SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: <Widget>[
-                      for(var match in _tournament.matches)
+                      for(var match in _tournament.)
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 8),
-                          child: Column(
-                            children: <Widget>[
-                              // TODO : Matches
-                            ],
+                          child: Card(
+                            child: Column(
+                              children: <Widget>[
+                                
+                              ],
+                            ),
                           ),
                         ),
                     ],
                   ),
-                ),
-                // TODO: Rosters
+                ),*/
               ]
             )
           )
@@ -265,8 +280,8 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   
   initApiData() async {
     await API.initToken();
-    await matches.getLiveMatches();
-    await matches.getTodayMatches();
+    await liveMatches.fetch();
+    await todayMatches.fetch();
     await tournaments.getOngoingTournaments();
     await tournaments.getUpcomingTournaments();
   }
@@ -331,7 +346,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                         FlatButton.icon(
                           icon: Icon(Icons.refresh, color: Colors.grey,),
                           label: Text("Refresh", style: TextStyle(color: Colors.grey),),
-                          onPressed: matches.getLiveMatches,
+                          onPressed: liveMatches.fetch,
                         )
                       ],
                     ),
@@ -339,11 +354,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                   sliver: SliverToBoxAdapter(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Consumer<MatchModel>(
+                    child: Consumer<LiveMatchModel>(
                     builder: (context, model, child) => Row(
                       children: <Widget>[
-                        if(model.live != null && model.live.isNotEmpty) 
-                          for(Match match in model.live) 
+                        if(model.list != null && model.list.isNotEmpty) 
+                          for(Match match in model.list) 
                         Padding(
                           padding: const EdgeInsets.only(left: 8, bottom: 4),
                           child: GestureDetector(
@@ -388,15 +403,15 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                   ),
                 ),
               ),
-              Consumer<MatchModel>(
+              Consumer<TodayMatchModel>(
                   builder: (context, model, child) => SliverStickyHeader(
                   header: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
                   ),
-                  sliver: matches.today.isNotEmpty ? SliverList(
+                  sliver: model.list.isNotEmpty ? SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                    var match = model.today[index];
+                    var match = model.list[index];
                       return GestureDetector(
                         onTap: () => openMatch(match.id),
                         child: Container(
@@ -461,7 +476,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                         ),
                       );
                   },
-                  childCount: matches.today.length
+                  childCount: model.list.length
                 ),
                 ) : SliverToBoxAdapter(child: loadingCircle,)
             ),
