@@ -65,10 +65,10 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     : SizedBox(width: size, height: size);
 
   Widget get loadingCircle => Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 166,
-                          alignment: Alignment.center,
-                          child: CircularProgressIndicator(strokeWidth: 1,),);
+    width: MediaQuery.of(context).size.width,
+    height: 166,
+    alignment: Alignment.center,
+    child: CircularProgressIndicator(strokeWidth: 1,),);
 
   // Launch a URL
   _launch(String url) async {
@@ -354,7 +354,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                               elevation: 3,
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
-                                width: 150,
+                                width: 175,
                                 child: Column(
                                   children: <Widget>[
                                     SizedBox(height: 8,),
@@ -366,11 +366,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Row(children: <Widget>[
-                                            teamLogo(match.opponents[i].opponent.imageUrl, 30),
+                                            teamLogo(match.opponents[i].opponent.imageUrl, 28),
                                             SizedBox(width: 4,),
                                             Text(match.opponents[i].opponent.name, 
                                               overflow: TextOverflow.fade,
-                                              style: TextStyle(fontSize: 16,)),
+                                              style: TextStyle(fontSize: 18,)),
                                           ],),
                                         Text((match.results[i].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
                                       ],),
