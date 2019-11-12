@@ -263,81 +263,81 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           controller: _tabController,
           children: [
             // MATCHES TAB
-            SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
+            CustomScrollView(
+            slivers: [
                 // LIVE SECTION
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                  child: Row(
-                    children: <Widget>[
-                      Text("Live", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
-                      FlatButton.icon(
-                        icon: Icon(Icons.refresh, color: Colors.grey,),
-                        label: Text("Refresh", style: TextStyle(color: Colors.grey),),
-                        onPressed: matches.getLiveMatches,
-                      )
-                    ],
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Row(
+                      children: <Widget>[
+                        Text("Live", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                        FlatButton.icon(
+                          icon: Icon(Icons.refresh, color: Colors.grey,),
+                          label: Text("Refresh", style: TextStyle(color: Colors.grey),),
+                          onPressed: matches.getLiveMatches,
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: <Widget>[
-                    if(matches.live != null && matches.live.isNotEmpty) 
-                      for(Match match in matches.live) 
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, bottom: 4),
-                      child: GestureDetector(
-                        onTap: () => openMatch(match.id),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(16.0))),
-                          elevation: 3,
-                          child: Container(
-                            width: 150,
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(height: 8,),
-                                Text(match.videogame.name, style: TextStyle(fontSize: 18,)),
-                                Text(match.tournament.name),
-                                SizedBox(height: 12,),
-                                teamLogo(match.opponents[0].opponent.imageUrl, 30),
-                                Text(match.opponents[0].opponent.name, style: TextStyle(fontSize: 16,)),
-                                Text((match.results[0].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
-                                Text((match.results[1].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
-                                Text(match.opponents[1].opponent.name, style: TextStyle(fontSize: 16,)),
-                                teamLogo(match.opponents[1].opponent.imageUrl, 30),
-                                SizedBox(height: 8,),
-                              ],
+                SliverToBoxAdapter(
+                  child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: <Widget>[
+                      if(matches.live != null && matches.live.isNotEmpty) 
+                        for(Match match in matches.live) 
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, bottom: 4),
+                        child: GestureDetector(
+                          onTap: () => openMatch(match.id),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(16.0))),
+                            elevation: 3,
+                            child: Container(
+                              width: 150,
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(height: 8,),
+                                  Text(match.videogame.name, style: TextStyle(fontSize: 18,)),
+                                  Text(match.tournament.name),
+                                  SizedBox(height: 12,),
+                                  teamLogo(match.opponents[0].opponent.imageUrl, 30),
+                                  Text(match.opponents[0].opponent.name, style: TextStyle(fontSize: 16,)),
+                                  Text((match.results[0].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
+                                  Text((match.results[1].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
+                                  Text(match.opponents[1].opponent.name, style: TextStyle(fontSize: 16,)),
+                                  teamLogo(match.opponents[1].opponent.imageUrl, 30),
+                                  SizedBox(height: 8,),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ) else Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 166,
-                      alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).secondaryHeaderColor)),),
+                      ) else Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 166,
+                        alignment: Alignment.center,
+                        child: CircularProgressIndicator(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).secondaryHeaderColor)),),
 
-                  ],
+                    ],
+                  ),
+              ),
+                ),
+              // TODAY SECTION
+              SliverToBoxAdapter(
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    child: Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
                 ),
               ),
-              // TODAY SECTION
-              Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                  child: Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    if(matches.today.isNotEmpty) for(Match match in matches.today)
-                    GestureDetector(
+              if(matches.today.isNotEmpty) SliverList(delegate: SliverChildBuilderDelegate((context, index) {
+                var match = matches.today[index];
+                    return GestureDetector(
                       onTap: () => openMatch(match.id),
                       child: Container(
                         width: MediaQuery.of(context).size.width - 16,
@@ -389,23 +389,21 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                           style: TextStyle(fontSize: 18)),
                                         ...[SizedBox(height: 4,),
                                         teamLogo(match.opponents[1].opponent.imageUrl, 54)]
-                                          
                                       ],
                                     ),
                                   ),
                                 ],),
                                 SizedBox(height: 4,),
-                                
                               ],
                             ),
                           ),
                         ),
                       ),
-                    ),
-                ],),
-              )
-            ]),
-          ),
+                    );
+                },
+                childCount: matches.today.length
+              ),)
+          ],),
           // TOURNAMENTS TAB
           SingleChildScrollView(
             child: Column(
