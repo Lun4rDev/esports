@@ -6,6 +6,7 @@ import 'package:esports/model/model.dart';
 import 'package:esports/model/tournamentmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 void main() => runApp(
   MultiProvider(
@@ -208,8 +209,16 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     );
   }
 
-  tournamentCard(Tournament t){
-    return Padding(
+  SliverStickyHeader tournamentSliver(String name, List<dynamic> list){
+    return SliverStickyHeader(
+      header: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        child: Text(name, style: TextStyle(fontSize: 36),),
+      ),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate((context, index){
+          var t = list[index];
+            return Padding(
                   padding: const EdgeInsets.only(bottom: 4),
                   child: GestureDetector(
                     onTap: () => openTournament(t.id),
@@ -239,6 +248,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                     ),
                   ),
                 );
+          },
+          childCount: list.length
+        ),
+      ),
+    );
   }
   
   initApiData() async {
@@ -441,33 +455,12 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           // TOURNAMENTS TAB
           CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: Text("Ongoing", style: TextStyle(fontSize: 36),),
-                ),
+              Consumer<TournamentModel>(
+                builder: (context, model, child) => tournamentSliver("Ongoing", tournaments.ongoing)
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index){
-                    return tournamentCard(tournaments.ongoing[index]);
-                  },
-                  childCount: tournaments.ongoing.length
-                ),
+              Consumer<TournamentModel>(
+                builder: (context, model, child) => tournamentSliver("Upcoming", tournaments.upcoming)
               ),
-              SliverToBoxAdapter(
-                child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                    child: Text("Upcoming", style: TextStyle(fontSize: 36),),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index){
-                    return tournamentCard(tournaments.upcoming[index]);
-                  },
-                  childCount: tournaments.upcoming.length
-                ),
-              ),
-
             ]
           ),
         ],
