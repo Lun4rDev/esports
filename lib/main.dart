@@ -72,6 +72,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   TournamentModel get tournament => Provider.of<TournamentModel>(context, listen: false);
   OngoingTournamentModel get ongoingTournaments => Provider.of<OngoingTournamentModel>(context, listen: false);
   UpcomingTournamentModel get upcomingTournaments => Provider.of<UpcomingTournamentModel>(context, listen: false);
+  notifyListeners() => <ChangeNotifier>[liveMatches, todayMatches, ongoingTournaments, upcomingTournaments].forEach((cn) => cn.notifyListeners());
+
+
+  List<Match> fm(List<Match> list) => List.from(list)..removeWhere((match) => !games.contains(match.videogame.name));
+  List<Tournament> ft(List<Tournament> list) => List.from(list)..removeWhere((tn) => !games.contains(tn.videogame.name));
 
   // Sized square logo fetched from the web
   Widget teamLogo(String url, double size) => url != null 
@@ -85,6 +90,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     alignment: Alignment.center,
     child: CircularProgressIndicator(strokeWidth: 1,),);
 
+  Widget nothingBox(String label) => SizedBox( // If no match corresponding to filters
+    width: MediaQuery.of(context).size.width,
+    height: 175, 
+    child: Center(child: Text(label, style: TextStyle(color: Colors.grey)),),);
+
   // List of selected games
   List<String> games = [];
 
@@ -97,7 +107,9 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
       }
     });
     prefs.setStringList(gamesKey, games);
+    notifyListeners();
   }
+  
 
   // Launch a URL
   _launch(String url) async {
@@ -254,13 +266,14 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     );
   }
 
-  SliverStickyHeader tournamentSliver(String name, List<dynamic> list){
+  SliverStickyHeader tournamentSliver(String name, List<dynamic> tList){
+    var list = ft(tList);
     return SliverStickyHeader(
       header: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: Text(name, style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
       ),
-      sliver: list.isNotEmpty ? SliverList(
+      sliver: tList.isNotEmpty ? list.isNotEmpty ? SliverList(
         delegate: SliverChildBuilderDelegate((context, index){
           var t = list[index];
             return Padding(
@@ -296,7 +309,8 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           },
           childCount: list.length
         ),
-      ) : SliverToBoxAdapter(child: loadingCircle,),
+      ) : SliverToBoxAdapter(child: nothingBox("No tournaments"))
+      : SliverToBoxAdapter(child: loadingCircle),
     );
   }
   
@@ -398,10 +412,13 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Consumer<LiveMatchModel>(
-                    builder: (context, model, child) => Row(
+                    builder: (context, model, child) { 
+                      var list = fm(model.list);
+                      return Row(
                       children: <Widget>[
-                        if(model.list != null && model.list.isNotEmpty) 
-                          for(Match match in model.list) 
+                        if(model.list.isNotEmpty) 
+                          if(list.isNotEmpty)
+                          for(Match match in fm(list)) 
                         Padding(
                           padding: const EdgeInsets.only(left: 8, bottom: 4),
                           child: GestureDetector(
@@ -438,23 +455,26 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                               ),
                             ),
                           ),
-                        ) else loadingCircle
-
+                        ) else nothingBox("No matches")
+                        else loadingCircle // If no matches yet (downloading)
                       ],
-                    ),
+                    );
+                    },
                 ),
                   ),
                 ),
               ),
               Consumer<TodayMatchModel>(
-                  builder: (context, model, child) => SliverStickyHeader(
+                  builder: (context, model, child) {
+                  var list = fm(model.list);
+                  return SliverStickyHeader(
                   header: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
                   ),
-                  sliver: model.list.isNotEmpty ? SliverList(
+                  sliver: model.list.isNotEmpty ? list.isNotEmpty ? SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                    var match = model.list[index];
+                    var match = list[index];
                       return GestureDetector(
                         onTap: () => openMatch(match.id),
                         child: Container(
@@ -519,10 +539,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                         ),
                       );
                   },
-                  childCount: model.list.length
+                  childCount: list.length
                 ),
-                ) : SliverToBoxAdapter(child: loadingCircle,)
-            ),
+                ) : SliverToBoxAdapter(child: nothingBox("No matches"))
+                : SliverToBoxAdapter(child: loadingCircle,)
+            );},
               )
                
           ],),
