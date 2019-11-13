@@ -7,6 +7,8 @@ import 'package:esports/model/tournamentmodel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(
   MultiProvider(
@@ -50,6 +52,10 @@ class EsportsPage extends StatefulWidget {
 }
 
 class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStateMixin {
+
+  SharedPreferences prefs;
+
+  String gamesKey = "GAMES";
   
   // Tabs controller
   TabController _tabController;
@@ -78,6 +84,20 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     height: 166,
     alignment: Alignment.center,
     child: CircularProgressIndicator(strokeWidth: 1,),);
+
+  // List of selected games
+  List<String> games = [];
+
+  toggleGame(String game){
+    setState(() {
+      if(games.contains(game)){
+        games.remove(game);
+      } else {
+        games.add(game);
+      }
+    });
+    prefs.setStringList(gamesKey, games);
+  }
 
   // Launch a URL
   _launch(String url) async {
@@ -288,6 +308,13 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     await upcomingTournaments.fetch();
   }
 
+  initSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      games = prefs.getStringList(gamesKey) ?? List<String>.of(API.games);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -295,12 +322,26 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     _tabController.addListener((){
       if(_tabController.index != _index) setState((){ _index = _tabController.index; });
     });
+    initSharedPreferences();
     initApiData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: SpeedDial(
+        closeManually: true,
+        child: Icon(Icons.games),
+        children: [
+          for(var game in API.games)
+            SpeedDialChild(
+              label: game,
+              labelStyle: TextStyle(fontSize: 18, color: Colors.black),
+              onTap: () => toggleGame(game),
+              backgroundColor: games.contains(game) ? Theme.of(context).accentColor : Colors.grey
+            )
+        ],
+      ),
       bottomNavigationBar: TabBar(
         indicatorWeight: 1,
         //selectedItemColor: Theme.of(),

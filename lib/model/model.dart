@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 class API {
+  // Games
+  static const games = ["CS:GO", "LoL", "Dota 2", "Rocket League", "Overwatch", "PUBG"];
+
   // Get token from the asset file
   static get getToken async => await rootBundle.loadString("assets/apikey.txt");
 
