@@ -431,7 +431,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                               elevation: 3,
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
-                                width: 175,
+                                width: 190,
                                 child: Column(
                                   children: <Widget>[
                                     SizedBox(height: 10,),
@@ -443,13 +443,20 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
-                                          Row(children: <Widget>[
-                                            teamLogo(match.opponents[i].opponent.imageUrl, 28),
-                                            SizedBox(width: 4,),
-                                            Text(match.opponents[i].opponent.name, 
-                                              overflow: TextOverflow.fade,
-                                              style: TextStyle(fontSize: 18,)),
-                                          ],),
+                                          Flexible(
+                                            child: Row(children: <Widget>[
+                                              teamLogo(match.opponents[i].opponent.imageUrl, 28),
+                                              SizedBox(width: 4,),
+                                              Flexible(
+                                                child: Text(match.opponents[i].opponent.name, 
+                                                    softWrap: false,
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.fade,
+                                                    style: TextStyle(fontSize: 18,)),
+                                              ),
+                                            ],),
+                                          ),
+                                        SizedBox(width: 4,),
                                         Text((match.results[i].score ?? 0).toString(), style: TextStyle(fontSize: 20,)),
                                       ],),
                                     SizedBox(height: 10,),
@@ -473,7 +480,16 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                   return SliverStickyHeader(
                   header: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                      child: Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                      child: Row(
+                        children: <Widget>[
+                          Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                          FlatButton.icon(
+                            icon: Icon(Icons.refresh, color: Colors.grey,),
+                            label: Text("Refresh", style: TextStyle(color: Colors.grey),),
+                            onPressed: todayMatches.fetch,
+                          )
+                        ],
+                      ),
                   ),
                   sliver: model.list.isNotEmpty ? list.isNotEmpty ? SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {

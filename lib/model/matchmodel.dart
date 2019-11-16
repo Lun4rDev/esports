@@ -48,6 +48,7 @@ class TodayMatchModel with ChangeNotifier {
   // Get today matches from the API
   Future fetch() async {
     list.clear();
+    notifyListeners();
     list = (await MatchModel.getMatches(todayMatchesUrl))..removeWhere((match) => match.opponents.length < 2);
     notifyListeners();
   }
