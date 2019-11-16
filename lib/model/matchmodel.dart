@@ -39,14 +39,8 @@ class LiveMatchModel with ChangeNotifier {
 
 class TodayMatchModel with ChangeNotifier {
 
-  // Current date and time
-  static DateTime now = DateTime.now();
-  
-  // Get today's date in the API format
-  static get today => "${now.year}-${now.month}-${now.day}";
-
   // API URL for today matches
-  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming?sort=begin_at&range[begin_at]=$today,$today";
+  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming?sort=begin_at&range[begin_at]=${API.today},${API.today}";
 
   // Today matches
   List<Match> list = [];

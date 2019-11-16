@@ -140,8 +140,10 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                   SizedBox(height: 4,),
                   Text(_match.current.tournament.name, style: TextStyle(fontSize: 14),),
                   SizedBox(height: 16,),
-                  Text(_match.current.beginAt.substring(11, 16), 
-                    style: TextStyle(fontSize: 24)),
+                  Text(API.localDate(_match.current.beginAt), 
+                    style: TextStyle(fontSize: 20)),
+                  Text(API.localHour(_match.current.beginAt), 
+                    style: TextStyle(fontSize: 30)),
                   SizedBox(height: 16,),
                   if(_match.current.opponents.length == 2) Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,7 +218,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                     ...[Text(model.current.prizepool, style: TextStyle(fontSize: 14),),
                     SizedBox(height: 4,)],
                   SizedBox(height: 16,),
-                  Text(tournament.current.beginAt.substring(5, 10), 
+                  Text(API.localDate(tournament.current.beginAt), 
                     style: TextStyle(fontSize: 24)),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -291,14 +293,14 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              teamLogo(t.league.imageUrl, 70),
+                              teamLogo(t.league.imageUrl, 68),
                               Column(
                                 children: <Widget>[
                                   Text(t.videogame.name, style: TextStyle(fontSize: 18)),
                                   Text(t.league.name),
                                 ],
                               ),
-                              Text(t.beginAt.substring(5, 10), style: TextStyle(fontSize: 24),)
+                              Text(API.localDate(t.beginAt), style: TextStyle(fontSize: 22),)
                             ],
                           ),
                         ),
@@ -434,6 +436,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                   children: <Widget>[
                                     SizedBox(height: 10,),
                                     Text(match.videogame.name, style: TextStyle(fontSize: 18,)),
+                                    SizedBox(height: 2,),
                                     Text(match.tournament.name),
                                     SizedBox(height: 12,),
                                     for(var i = 0; i < match.opponents.length; i++)
@@ -501,7 +504,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                       width: 1,
                                       height: 32,
                                       color: Theme.of(context).accentColor),
-                                    Text(match.beginAt.substring(11, 16), 
+                                    Text(API.localHour(match.beginAt),
                                     style: TextStyle(fontSize: 24)),
                                   ],),
                                   SizedBox(height: 12,),

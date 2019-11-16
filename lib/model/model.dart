@@ -12,6 +12,18 @@ class API {
   // Access token
   static String accessToken;
 
+  // Current date and time
+  static DateTime now = DateTime.now();
+  
+  // Get today's date in the API format
+  static get today => "${now.year}-${now.month}-${now.day}";
+
+  // Get the local DateTime corresponding to an ISO-8601 formatted string
+  static DateTime localDateTime(String date) => DateTime.parse(date).toLocal();
+
+  static String localDate(String date) => localDateTime(date).toString().substring(0, 10);
+  static String localHour(String date) => localDateTime(date).toString().substring(11, 16);
+
   // GET request to the API for a single object or a list
   static Future<dynamic> getRequest(String url) async {
     var res;
