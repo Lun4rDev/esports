@@ -128,65 +128,116 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
       builder: (BuildContext context){
-        return SingleChildScrollView(
-          dragStartBehavior: DragStartBehavior.down,
-          child: Container(
-            margin: EdgeInsets.all(16),
-            child: Consumer<MatchModel>(
-              builder: (context, _match, child) { 
-                return _match.current != null && _match.current.id == id ? Column(
-                children: <Widget>[
-                  Text(_match.current.videogame.name, style: TextStyle(fontSize: 16),),
-                  SizedBox(height: 4,),
-                  Text(_match.current.tournament.name, style: TextStyle(fontSize: 14),),
-                  SizedBox(height: 16,),
-                  Text(API.localDate(_match.current.beginAt), 
+        return Container(
+          margin: EdgeInsets.all(16),
+          child: Consumer<MatchModel>(
+            builder: (context, _match, child) { 
+              return _match.current != null && _match.current.id == id ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: (){
+                      Navigator.pop(context);
+                      openTournament(_match.current.tournamentId);
+                    },
+                child: Row(children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(_match.current.videogame.name, style: TextStyle(fontSize: 18),),
+                        SizedBox(height: 4,),
+                        Text(_match.current.league.name,
+                          softWrap: false, 
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(fontSize: 14),),
+                      ],
+                    )),
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                      Text(_match.current.serie.name ?? _match.current.serie.fullName ?? "", style: TextStyle(fontSize: 14),),
+                      SizedBox(height: 4,),
+                      Text(_match.current.tournament.name, style: TextStyle(fontSize: 14),),
+                    ],),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Text(API.localDate(_match.current.beginAt), 
+                          style: TextStyle(fontSize: 18)),
+                        Text(API.localTime(_match.current.beginAt), 
+                          style: TextStyle(fontSize: 26)),
+                      ],),
+                  ),
+                  
+                ],)),
+                SizedBox(height: 16,),
+                if(_match.current.opponents.length == 2) Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Text(_match.current.opponents[0].opponent.name, 
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18)),
+                        teamLogo(_match.current.opponents[0].opponent.imageUrl, 80),
+                      ],
+                    ),
+                  ),
+                  Text("VS", 
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20)),
-                  Text(API.localHour(_match.current.beginAt), 
-                    style: TextStyle(fontSize: 30)),
-                  SizedBox(height: 16,),
-                  if(_match.current.opponents.length == 2) Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Expanded(
+                    child: Column(
+                      children: <Widget>[
+                        Text(_match.current.opponents[1].opponent.name, 
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 18)),
+                        teamLogo(_match.current.opponents[1].opponent.imageUrl, 80),
+                      ],
+                    ),
+                  ),
+                ],),
+                SizedBox(height: 16,),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Text(_match.current.opponents[0].opponent.name, 
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 18)),
-                          teamLogo(_match.current.opponents[0].opponent.imageUrl, 100),
-                        ],
-                      ),
+                    for(var game in _match.current.games)
+                      Card(child: Container(
+                        width: 116,
+                        height: 58,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                          Text("Game ${game.position}"),
+                          Text(game.finished  
+                            ? _match.current.opponents.firstWhere((o) => o.opponent.id == game.winner.id).opponent.name
+                            : game.beginAt != null ? API.localTime(game.beginAt) : "N/A")
+                        ],),
+                      ),)
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16,),
+                if(_match.current.liveUrl != null)
+                  Container(
+                    child: OutlineButton(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      child: Text(_match.current.liveUrl.replaceFirst("https://", "")),
+                      onPressed: () => _launch(_match.current.liveUrl),
                     ),
-                    Text("VS", 
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 20)),
-                    Expanded(
-                      child: Column(
-                        children: <Widget>[
-                          Text(_match.current.opponents[1].opponent.name, 
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 18)),
-                          teamLogo(_match.current.opponents[1].opponent.imageUrl, 100),
-                        ],
-                      ),
-                    ),
-                  ],),
-                  SizedBox(height: 32,),
-                  if(_match.current.liveUrl != null)
-                    Container(
-                      child: OutlineButton(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                        child: Text(_match.current.liveUrl.replaceFirst("https://", "")),
-                        onPressed: () => _launch(_match.current.liveUrl),
-                      ),
-                    )
-                ],
-              ) : loadingCircle;
-              },
-            ),
+                  )
+              ],
+            ) : loadingCircle;
+            },
           ),
         );
+      
       }
     );
   }
@@ -520,7 +571,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                       width: 1,
                                       height: 32,
                                       color: Theme.of(context).accentColor),
-                                    Text(API.localHour(match.beginAt),
+                                    Text(API.localTime(match.beginAt),
                                     style: TextStyle(fontSize: 24)),
                                   ],),
                                   SizedBox(height: 12,),

@@ -22,7 +22,7 @@ class API {
   static DateTime localDateTime(String date) => DateTime.parse(date).toLocal();
 
   static String localDate(String date) => localDateTime(date).toString().substring(0, 10);
-  static String localHour(String date) => localDateTime(date).toString().substring(11, 16);
+  static String localTime(String date) => localDateTime(date).toString().substring(11, 16);
 
   // GET request to the API for a single object or a list
   static Future<dynamic> getRequest(String url) async {
