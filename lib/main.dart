@@ -247,6 +247,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     showModalBottomSheet(
       context: context,
       elevation: 4,
+      isScrollControlled: true,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
       builder: (BuildContext context){
         return SingleChildScrollView(
@@ -300,13 +301,14 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: <Widget>[
-                        for(var team in tournament.current.teams)
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8),
+                        for(var roster in tournament.current.expectedRoster)
+                          FlatButton(
+                            onPressed: () => openRoster(id, roster),
+                            padding: EdgeInsets.symmetric(horizontal: 8),
                             child: Column(
                               children: <Widget>[
-                                teamLogo(team.imageUrl, 50),
-                                Text(team.name)
+                                teamLogo(roster.team.imageUrl, 50),
+                                Text(roster.team.name)
                               ],
                             ),
                           ),
@@ -339,6 +341,45 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
             );
             },
           ) 
+        );
+      }
+    );
+  }
+
+  openRoster(int tournamentId, ExpectedRoster roster) async {
+    //await Future.delayed(Duration.zero);
+    showModalBottomSheet(
+      context: context,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
+      builder: (context) {
+        return Container(
+          margin: EdgeInsets.all(16),
+          child: Column(children: <Widget>[
+            teamLogo(roster.team.imageUrl, 80),
+            SizedBox(height: 4),
+            Text(roster.team.name, style: TextStyle(fontSize: 24)),
+            SizedBox(height: 26, child: Divider()),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(children: <Widget>[
+                for(var player in roster.players)
+                  ...[
+                    Column(
+                      children: <Widget>[
+                        teamLogo(player.imageUrl, 100),
+                        SizedBox(height: 4,),
+                        if(player.role != null) Text(player.role),
+                        Text(player.name, style: TextStyle(fontSize: 20)),
+                        if(player.firstName != null) Text("${player.firstName} ${player.lastName}"),
+                        if(player.hometown != null) Text(player.hometown, style: TextStyle(fontSize: 16)),
+                      ],
+                    ),
+                    SizedBox(width: 16,)
+                  ]
+              ]),
+            )
+          ],),
         );
       }
     );
@@ -550,6 +591,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                   ),
                 ),
               ),
+              // TODAY SECTION
               Consumer<TodayMatchModel>(
                   builder: (context, model, child) {
                   var list = fm(model.list);
@@ -626,7 +668,6 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                                       ),
                                     ),
                                   ],),
-                                  SizedBox(height: 4,),
                                 ],
                               ),
                             ),

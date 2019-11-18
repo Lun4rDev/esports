@@ -572,6 +572,7 @@ class Videogame {
 class Tournament {
   String beginAt;
   String endAt;
+  List<ExpectedRoster> expectedRoster;
   int id;
   League league;
   int leagueId;
@@ -608,6 +609,12 @@ class Tournament {
   Tournament.fromJson(Map<String, dynamic> json) {
     beginAt = json['begin_at'];
     endAt = json['end_at'];
+    if (json['expected_roster'] != null) {
+      expectedRoster = new List<ExpectedRoster>();
+      json['expected_roster'].forEach((v) {
+        expectedRoster.add(new ExpectedRoster.fromJson(v));
+      });
+    }
     id = json['id'];
     league = json['league'] != null ? League.fromJson(json['league']) : null;
     leagueId = json['league_id'];
@@ -640,6 +647,10 @@ class Tournament {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['begin_at'] = this.beginAt;
     data['end_at'] = this.endAt;
+    if (this.expectedRoster != null) {
+      data['expected_roster'] =
+          this.expectedRoster.map((v) => v.toJson()).toList();
+    }
     data['id'] = this.id;
     if (this.league != null) {
       data['league'] = this.league.toJson();
@@ -664,6 +675,106 @@ class Tournament {
     }
     data['winner_id'] = this.winnerId;
     data['winner_type'] = this.winnerType;
+    return data;
+  }
+}
+
+class ExpectedRoster {
+  List<Players> players;
+  Team team;
+
+  ExpectedRoster({this.players, this.team});
+
+  ExpectedRoster.fromJson(Map<String, dynamic> json) {
+    if (json['players'] != null) {
+      players = new List<Players>();
+      json['players'].forEach((v) {
+        players.add(new Players.fromJson(v));
+      });
+    }
+    team = json['team'] != null ? new Team.fromJson(json['team']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.players != null) {
+      data['players'] = this.players.map((v) => v.toJson()).toList();
+    }
+    if (this.team != null) {
+      data['team'] = this.team.toJson();
+    }
+    return data;
+  }
+}
+class Players {
+  String firstName;
+  String hometown;
+  int id;
+  String imageUrl;
+  String lastName;
+  String name;
+  String role;
+  String slug;
+
+  Players(
+      {this.firstName,
+      this.hometown,
+      this.id,
+      this.imageUrl,
+      this.lastName,
+      this.name,
+      this.role,
+      this.slug});
+
+  Players.fromJson(Map<String, dynamic> json) {
+    firstName = json['first_name'];
+    hometown = json['hometown'];
+    id = json['id'];
+    imageUrl = json['image_url'];
+    lastName = json['last_name'];
+    name = json['name'];
+    role = json['role'];
+    slug = json['slug'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['first_name'] = this.firstName;
+    data['hometown'] = this.hometown;
+    data['id'] = this.id;
+    data['image_url'] = this.imageUrl;
+    data['last_name'] = this.lastName;
+    data['name'] = this.name;
+    data['role'] = this.role;
+    data['slug'] = this.slug;
+    return data;
+  }
+}
+
+class Team {
+  String acronym;
+  int id;
+  String imageUrl;
+  String name;
+  String slug;
+
+  Team({this.acronym, this.id, this.imageUrl, this.name, this.slug});
+
+  Team.fromJson(Map<String, dynamic> json) {
+    acronym = json['acronym'];
+    id = json['id'];
+    imageUrl = json['image_url'];
+    name = json['name'];
+    slug = json['slug'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['acronym'] = this.acronym;
+    data['id'] = this.id;
+    data['image_url'] = this.imageUrl;
+    data['name'] = this.name;
+    data['slug'] = this.slug;
     return data;
   }
 }
