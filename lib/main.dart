@@ -257,20 +257,45 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
               margin: EdgeInsets.all(16),
               child: model.current != null && model.current.id == id ? Column(
                 children: <Widget>[
-                  Text(model.current.videogame.name, style: TextStyle(fontSize: 16),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                        ...[teamLogo(model.current.league.imageUrl, 72),
+                        SizedBox(width: 4,),],
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Text(model.current.videogame.name,
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 20),),
+                            SizedBox(height: 4,),
+                            Text(model.current.league.name, 
+                              style: TextStyle(fontSize: 13),),
+                          ],
+                        ),
+                      ],),
+                      Text(API.localDate(tournament.current.beginAt), 
+                        style: TextStyle(fontSize: 20)),
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                        Text(model.current.serie.name ?? model.current.serie.fullName ?? "", style: TextStyle(fontSize: 18),),
+                        Text(" – "),
+                        Text(model.current.name, style: TextStyle(fontSize: 18),),
+                    ],
+                  ),
                   SizedBox(height: 4,),
-                  Text(model.current.serie.name ?? model.current.league.name, style: TextStyle(fontSize: 14),),
-                  SizedBox(height: 4,),
-                  Text(model.current.name, style: TextStyle(fontSize: 14),),
-                  SizedBox(height: 4,),
-                  ...[teamLogo(model.current.league.imageUrl, 80),
-                    SizedBox(height: 4,),],
                   if(model.current.prizepool != null) 
                     ...[Text(model.current.prizepool, style: TextStyle(fontSize: 14),),
                     SizedBox(height: 4,)],
-                  SizedBox(height: 16,),
-                  Text(API.localDate(tournament.current.beginAt), 
-                    style: TextStyle(fontSize: 24)),
+                  Divider(height: 32),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -344,14 +369,14 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              teamLogo(t.league.imageUrl, 68),
+                              teamLogo(t.league.imageUrl, 54),
                               Column(
                                 children: <Widget>[
                                   Text(t.videogame.name, style: TextStyle(fontSize: 18)),
-                                  Text(t.league.name),
+                                  Text(t.league.name, style: TextStyle(fontSize: 13)),
                                 ],
                               ),
-                              Text(API.localDate(t.beginAt), style: TextStyle(fontSize: 22),)
+                              Text(API.localDate(t.beginAt), style: TextStyle(fontSize: 20),)
                             ],
                           ),
                         ),
