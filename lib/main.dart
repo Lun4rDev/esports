@@ -250,97 +250,122 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
       isScrollControlled: true,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
       builder: (BuildContext context){
-        return SingleChildScrollView(
-          dragStartBehavior: DragStartBehavior.down,
-          child: Consumer<TournamentModel>(
-            builder: (context, model, child) {  
-              return Container(
-              margin: EdgeInsets.all(16),
-              child: model.current != null && model.current.id == id ? Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Row(
+        return Consumer<TournamentModel>(
+          builder: (context, model, child) {  
+            return Container(
+            margin: EdgeInsets.all(16),
+            child: model.current != null && model.current.id == id ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                      ...[teamLogo(model.current.league.imageUrl, 72),
+                      SizedBox(width: 4,),],
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                        ...[teamLogo(model.current.league.imageUrl, 72),
-                        SizedBox(width: 4,),],
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Text(model.current.videogame.name,
-                              textAlign: TextAlign.start,
-                              style: TextStyle(fontSize: 20),),
-                            SizedBox(height: 4,),
-                            Text(model.current.league.name, 
-                              style: TextStyle(fontSize: 13),),
-                          ],
-                        ),
-                      ],),
-                      Text(API.localDate(tournament.current.beginAt), 
-                        style: TextStyle(fontSize: 20)),
-                    ],
-                  ),
-                  SizedBox(height: 8,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                          Text(model.current.videogame.name,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(fontSize: 20),),
+                          SizedBox(height: 4,),
+                          Text(model.current.league.name, 
+                            style: TextStyle(fontSize: 13),),
+                        ],
+                      ),
+                    ],),
+                    Text(API.localDate(tournament.current.beginAt), 
+                      style: TextStyle(fontSize: 20)),
+                  ],
+                ),
+                SizedBox(height: 16,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                      Text(model.current.serie.name ?? model.current.serie.fullName ?? "", style: TextStyle(fontSize: 18),),
+                      Text(" – "),
+                      Text(model.current.name, style: TextStyle(fontSize: 18),),
+                  ],
+                ),
+                SizedBox(height: 4,),
+                if(model.current.prizepool != null) 
+                  ...[Text(model.current.prizepool, style: TextStyle(fontSize: 14),),
+                  SizedBox(height: 4,)],
+                Divider(height: 32),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: <Widget>[
-                        Text(model.current.serie.name ?? model.current.serie.fullName ?? "", style: TextStyle(fontSize: 18),),
-                        Text(" – "),
-                        Text(model.current.name, style: TextStyle(fontSize: 18),),
+                      for(var roster in tournament.current.expectedRoster)
+                        FlatButton(
+                          onPressed: () => openRoster(id, roster),
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              teamLogo(roster.team.imageUrl, 50),
+                              Text(roster.team.name)
+                            ],
+                          ),
+                        ),
                     ],
                   ),
-                  SizedBox(height: 4,),
-                  if(model.current.prizepool != null) 
-                    ...[Text(model.current.prizepool, style: TextStyle(fontSize: 14),),
-                    SizedBox(height: 4,)],
-                  Divider(height: 32),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
+                ),
+                Divider(),
+                SizedBox(height: 4),
+                Flexible(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * .49),
+                    child: ListView(
+                      shrinkWrap: true,
                       children: <Widget>[
-                        for(var roster in tournament.current.expectedRoster)
-                          FlatButton(
-                            onPressed: () => openRoster(id, roster),
-                            padding: EdgeInsets.symmetric(horizontal: 8),
+                          for(var match in model.current.matches)
+                            GestureDetector(
+                              onTap: () => openMatch(match.id),
+                              child: Card(
+                                child: Container(
+                                  margin: EdgeInsets.all(4),
+                                  width: MediaQuery.of(context).size.width * .7,
+                                  child: Column(children: <Widget>[
+                                    if(match.beginAt != null) Text("${API.localDate(match.beginAt)} – ${API.localTime(match.beginAt)}"),
+                                    Text(match.name),
+                                  ],),
+                                ),),
+                            )    
+                        ],
+                    ),
+                  ),
+                )
+                            // TODO: Rosters
+                // TODO : Matches
+                // Matches doesn't seem to have relevant data in the free plan ?
+                /*SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: <Widget>[
+                      for(var match in tournament.current.)
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 8),
+                          child: Card(
                             child: Column(
                               children: <Widget>[
-                                teamLogo(roster.team.imageUrl, 50),
-                                Text(roster.team.name)
+                                
                               ],
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
-                  // TODO: Rosters
-                  // TODO : Matches
-                  // Matches doesn't seem to have relevant data in the free plan ?
-                  /*SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        for(var match in tournament.current.)
-                          Container(
-                            margin: EdgeInsets.symmetric(horizontal: 8),
-                            child: Card(
-                              child: Column(
-                                children: <Widget>[
-                                  
-                                ],
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),*/
-                ]
-              ) : loadingCircle
-            );
-            },
-          ) 
+                ),*/
+              ]
+            ) : loadingCircle
+          );
+          },
         );
       }
     );
@@ -355,7 +380,9 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
       builder: (context) {
         return Container(
           margin: EdgeInsets.all(16),
-          child: Column(children: <Widget>[
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
             teamLogo(roster.team.imageUrl, 80),
             SizedBox(height: 4),
             Text(roster.team.name, style: TextStyle(fontSize: 24)),
