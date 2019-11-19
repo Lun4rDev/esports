@@ -86,13 +86,13 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   // Loading animation
   Widget get loadingCircle => Container(
     width: MediaQuery.of(context).size.width,
-    height: 166,
+    height: 140,
     alignment: Alignment.center,
     child: CircularProgressIndicator(strokeWidth: 1,),);
 
   Widget nothingBox(String label) => SizedBox( // If no match corresponding to filters
     width: MediaQuery.of(context).size.width,
-    height: 175, 
+    height: 140, 
     child: Center(child: Text(label, style: TextStyle(color: Colors.grey)),),);
 
   // List of selected games
@@ -329,12 +329,19 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                               onTap: () => openMatch(match.id),
                               child: Card(
                                 child: Container(
-                                  margin: EdgeInsets.all(4),
+                                  margin: EdgeInsets.all(8),
                                   width: MediaQuery.of(context).size.width * .7,
-                                  child: Column(children: <Widget>[
-                                    if(match.beginAt != null) Text("${API.localDate(match.beginAt)} – ${API.localTime(match.beginAt)}"),
-                                    Text(match.name),
-                                  ],),
+                                  child: Wrap(
+                                    alignment: WrapAlignment.spaceBetween,
+                                    runAlignment: WrapAlignment.center,
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    children: <Widget>[
+                                      Text(match.name, style: TextStyle(fontSize: 16)),
+                                      if(match.beginAt != null) 
+                                        Text("${API.localDate(match.beginAt)} – ${API.localTime(match.beginAt)}",
+                                          style: TextStyle(fontSize: 16)),
+                                     ],
+                                  ),
                                 ),),
                             )    
                         ],
