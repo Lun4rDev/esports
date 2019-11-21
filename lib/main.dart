@@ -1,12 +1,11 @@
 import 'dart:core';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/gamemodel.dart';
 import 'package:esports/model/matchmodel.dart';
 import 'package:esports/model/tournamentmodel.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-
 import 'package:esports/matchestab.dart';
 import 'package:esports/tournamentstab.dart';
 
@@ -69,8 +68,10 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   OngoingTournamentModel get ongoingTournaments => Provider.of<OngoingTournamentModel>(context, listen: false);
   UpcomingTournamentModel get upcomingTournaments => Provider.of<UpcomingTournamentModel>(context, listen: false);
 
+  // Notifies all consumers
   notifyListeners() => <ChangeNotifier>[liveMatches, todayMatches, ongoingTournaments, upcomingTournaments].forEach((cn) => cn.notifyListeners());
 
+  // Initializes the providers data
   initApiData() async {
     await API.initToken();
     await liveMatches.fetch();
@@ -110,8 +111,6 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
         ),
         bottomNavigationBar: TabBar(
           indicatorWeight: 1,
-          //selectedItemColor: Theme.of(),
-          //unselectedItemColor: Colors.black,
           controller: _tabController,
           onTap: (int index) {
             setState(() {

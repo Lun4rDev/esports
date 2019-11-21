@@ -14,7 +14,8 @@ class Utils {
     alignment: Alignment.center,
     child: CircularProgressIndicator(strokeWidth: 1,),);
 
-  static Widget nothingBox(String label) => SizedBox( // If no match corresponding to filters
+  // Placeholder box when there is no data
+  static Widget nothingBox(String label) => SizedBox( 
     width: double.infinity,
     height: 140, 
     child: Center(child: Text(label, style: TextStyle(color: Colors.grey)),),);

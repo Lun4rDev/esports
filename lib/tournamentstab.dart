@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/gamemodel.dart';
 import 'package:esports/model/tournamentmodel.dart';
 import 'package:esports/matchestab.dart';
 import 'package:esports/utils.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 
 class TournamentsTab extends StatelessWidget {
   // Models getters
@@ -14,8 +14,10 @@ class TournamentsTab extends StatelessWidget {
   OngoingTournamentModel ongoingTournaments(context) => Provider.of<OngoingTournamentModel>(context, listen: false);
   UpcomingTournamentModel upcomingTournaments(context) => Provider.of<UpcomingTournamentModel>(context, listen: false);
 
+  // Returns a filtered list of tournaments, keeping only the selected games
   List<Tournament> ft(context, List<Tournament> list) => List.from(list)..removeWhere((tn) => !games(context).list.contains(tn.videogame.name));
 
+  // Takes a tournament id, opens a bottom sheet displaying the data of the tournament
   static openTournament(BuildContext context, int id) async {
     tournament(context).fetch(id);
     showModalBottomSheet(
@@ -131,6 +133,7 @@ class TournamentsTab extends StatelessWidget {
     );
   }
 
+  // Returns a sliver with a header and a list of tournaments
   SliverStickyHeader tournamentSliver(BuildContext context, String name, List<dynamic> tList){
     var list = ft(context, tList);
     return SliverStickyHeader(
@@ -179,6 +182,7 @@ class TournamentsTab extends StatelessWidget {
     );
   }
 
+  // Takes an ExpectedRoster, opens a bottom sheet displaying the roster data
   static openRoster(BuildContext context, int tournamentId, ExpectedRoster roster) async {
     //await Future.delayed(Duration.zero);
     showModalBottomSheet(

@@ -3,7 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:esports/model/model.dart';
 
 class GameModel with ChangeNotifier {
-
+  
+  // SharedPreferences instance
   SharedPreferences prefs;
 
   // Shared preferences key
@@ -12,6 +13,7 @@ class GameModel with ChangeNotifier {
   // List of selected games
   List<String> list = [];
 
+  // Switch the game on or off
   toggleGame(String game){
     if(list.contains(game)){
       list.remove(game);
@@ -22,6 +24,7 @@ class GameModel with ChangeNotifier {
     notifyListeners();
   }
 
+  // Initialize the SharedPreferences instance, and retrieve the saved list of games
   init() async {
     prefs = await SharedPreferences.getInstance();
     list = prefs.getStringList(gamesKey) ?? List<String>.of(API.games);

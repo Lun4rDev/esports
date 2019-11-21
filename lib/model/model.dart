@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 class API {
+
   // Games
   static const games = ["CS:GO", "LoL", "Dota 2", "Rocket League", "Overwatch", "PUBG"];
 
@@ -37,12 +38,10 @@ class API {
     return res;
   }
 
-  static Future<Null> initToken() async {
-    accessToken = "Bearer ${await getToken}";
-  }
+  // Initialize the access token
+  static Future<Null> initToken() async => accessToken = "Bearer ${await getToken}";
 }
 
-/*  MATCH */
 class Match {
   String beginAt;
   bool detailedStats;

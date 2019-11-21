@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/matchmodel.dart';
 import 'package:esports/model/gamemodel.dart';
 import 'package:esports/tournamentstab.dart';
 import 'package:esports/utils.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 
 class MatchesTab extends StatelessWidget {
-
   // Models getters
   GameModel games(context) => Provider.of<GameModel>(context, listen: false);
   static MatchModel match(context) => Provider.of<MatchModel>(context, listen: false);
   LiveMatchModel liveMatches(context) => Provider.of<LiveMatchModel>(context, listen: false);
   TodayMatchModel todayMatches(context) => Provider.of<TodayMatchModel>(context, listen: false);
 
+  // Returns a filtered list of matches, keeping only the selected games
   List<Match> fm(BuildContext context, List<Match> list) => List.from(list)..removeWhere((match) => !games(context).list.contains(match.videogame.name));
 
   // Launch a URL
@@ -28,6 +28,7 @@ class MatchesTab extends StatelessWidget {
     }
   }
   
+  // Takes a match id, opens a bottom sheet displaying the data of the match
   static openMatch(BuildContext context, int id) async {
     match(context).fetch(id);
     showModalBottomSheet(
@@ -79,7 +80,6 @@ class MatchesTab extends StatelessWidget {
                           style: TextStyle(fontSize: 26)),
                       ],),
                   ),
-                  
                 ],)),
                 SizedBox(height: 16,),
                 if(_match.current.opponents.length == 2) Row(
@@ -208,10 +208,10 @@ class MatchesTab extends StatelessWidget {
                                               SizedBox(width: 4,),
                                               Flexible(
                                                 child: Text(match.opponents[i].opponent.name, 
-                                                    softWrap: false,
-                                                    maxLines: 1,
-                                                    overflow: TextOverflow.fade,
-                                                    style: TextStyle(fontSize: 18,)),
+                                                  softWrap: false,
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.fade,
+                                                  style: TextStyle(fontSize: 18,)),
                                               ),
                                             ],),
                                           ),
