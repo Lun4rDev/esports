@@ -227,7 +227,7 @@ class MatchesTab extends StatelessWidget {
                             ),
                           ),
                         ) else Utils.nothingBox("No matches")
-                        else Utils.loadingCircle // If no matches yet (downloading)
+                        else SizedBox(width: MediaQuery.of(context).size.width, child: Utils.loadingCircle) // If no matches yet (downloading)
                       ],
                     );
                     },

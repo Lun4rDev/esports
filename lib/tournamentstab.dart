@@ -28,6 +28,7 @@ class TournamentsTab extends StatelessWidget {
       builder: (BuildContext context){
         return Consumer<TournamentModel>(
           builder: (context, model, child) {  
+            var dateTime = API.localDateTime(tournament(context).current.beginAt);
             return Container(
             margin: EdgeInsets.all(16),
             child: model.current != null && model.current.id == id ? Column(
@@ -51,12 +52,18 @@ class TournamentsTab extends StatelessWidget {
                             style: TextStyle(fontSize: 20),),
                           SizedBox(height: 4,),
                           Text(model.current.league.name, 
-                            style: TextStyle(fontSize: 13),),
+                            style: TextStyle(fontSize: 14),),
                         ],
                       ),
                     ],),
-                    Text(API.localDate(tournament(context).current.beginAt), 
-                      style: TextStyle(fontSize: 20)),
+                    Column(
+                      children: <Widget>[
+                        Text(dateTime.year.toString(), 
+                          style: TextStyle(fontSize: 22)),
+                        Text("${dateTime.month}/${dateTime.day}", 
+                          style: TextStyle(fontSize: 18)),
+                      ],
+                    ),
                   ],
                 ),
                 SizedBox(height: 16,),
