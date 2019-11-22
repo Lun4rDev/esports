@@ -20,7 +20,8 @@ class GameModel with ChangeNotifier {
     } else {
       list.add(game);
     }
-    prefs.setStringList(gamesKey, list);
+    if(prefs != null)
+      prefs.setStringList(gamesKey, list);
     notifyListeners();
   }
 
@@ -28,5 +29,6 @@ class GameModel with ChangeNotifier {
   init() async {
     prefs = await SharedPreferences.getInstance();
     list = prefs.getStringList(gamesKey) ?? List<String>.of(API.games);
+    notifyListeners();
   }
 }

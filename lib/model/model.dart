@@ -14,10 +14,10 @@ class API {
   static String accessToken;
 
   // Current date and time
-  static DateTime now = DateTime.now();
+  static DateTime now = DateTime.now().toUtc();
   
   // Get today's date in the API format
-  static get today => "${now.year}-${now.month}-${now.day}";
+  static get todayRange => "${now.toIso8601String()},${now.add(Duration(days: 1)).toIso8601String()}";
 
   // Get the local DateTime corresponding to an ISO-8601 formatted string
   static DateTime localDateTime(String date) => DateTime.parse(date).toLocal();
@@ -39,7 +39,9 @@ class API {
   }
 
   // Initialize the access token
-  static Future<Null> initToken() async => accessToken = "Bearer ${await getToken}";
+  static Future<Null> initToken() async {
+    accessToken = "Bearer ${await getToken}";
+  } 
 }
 
 class Match {

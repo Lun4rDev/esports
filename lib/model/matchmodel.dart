@@ -40,7 +40,7 @@ class LiveMatchModel with ChangeNotifier {
 class TodayMatchModel with ChangeNotifier {
 
   // API URL for today matches
-  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming?sort=begin_at&range[begin_at]=${API.today},${API.today}";
+  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming?sort=begin_at&range[begin_at]=${API.todayRange}";
 
   // Today matches
   List<Match> list = [];

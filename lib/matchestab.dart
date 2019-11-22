@@ -81,7 +81,7 @@ class MatchesTab extends StatelessWidget {
                       ],),
                   ),
                 ],)),
-                SizedBox(height: 16,),
+                SizedBox(height: 26,),
                 if(_match.current.opponents.length == 2) Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -91,6 +91,7 @@ class MatchesTab extends StatelessWidget {
                         Text(_match.current.opponents[0].opponent.name, 
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 18)),
+                        SizedBox(height: 8),
                         Utils.image(_match.current.opponents[0].opponent.imageUrl, 80),
                       ],
                     ),
@@ -104,12 +105,13 @@ class MatchesTab extends StatelessWidget {
                         Text(_match.current.opponents[1].opponent.name, 
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 18)),
+                        SizedBox(height: 8),
                         Utils.image(_match.current.opponents[1].opponent.imageUrl, 80),
                       ],
                     ),
                   ),
                 ],),
-                SizedBox(height: 16,),
+                SizedBox(height: 26,),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(

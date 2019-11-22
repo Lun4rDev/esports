@@ -9,14 +9,14 @@ class Utils {
 
   // Loading animation
   static Widget get loadingCircle => Container(
-    width: double.infinity,
+    width: double.maxFinite,
     height: 140,
     alignment: Alignment.center,
     child: CircularProgressIndicator(strokeWidth: 1,),);
 
   // Placeholder box when there is no data
   static Widget nothingBox(String label) => SizedBox( 
-    width: double.infinity,
+    width: double.maxFinite,
     height: 140, 
     child: Center(child: Text(label, style: TextStyle(color: Colors.grey)),),);
 }
