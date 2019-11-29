@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:esports/localizations.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/gamemodel.dart';
 import 'package:esports/model/tournamentmodel.dart';
-import 'package:esports/matchestab.dart';
+import 'package:esports/tabs/matchestab.dart';
 import 'package:esports/utils.dart';
 
 class TournamentsTab extends StatelessWidget {
+  // i18n String getter
+  static String str(BuildContext context, String key) => EsportsLocalizations.of(context).get(key);
+
   // Models getters
   GameModel games(context) => Provider.of<GameModel>(context, listen: false);
   static TournamentModel tournament(context) => Provider.of<TournamentModel>(context, listen: false);
@@ -184,7 +188,7 @@ class TournamentsTab extends StatelessWidget {
           },
           childCount: list.length
         ),
-      ) : SliverToBoxAdapter(child: Utils.nothingBox("No tournaments"))
+      ) : SliverToBoxAdapter(child: Utils.nothingBox(str(context, "notournament")))
       : SliverToBoxAdapter(child: Utils.loadingCircle),
     );
   }
@@ -237,10 +241,10 @@ class TournamentsTab extends StatelessWidget {
           CustomScrollView(
             slivers: [
               Consumer<OngoingTournamentModel>(
-                builder: (context, model, child) => tournamentSliver(context, "Ongoing", model.list) 
+                builder: (context, model, child) => tournamentSliver(context, str(context, "ongoing"), model.list) 
               ),
               Consumer<UpcomingTournamentModel>(
-                builder: (context, model, child) => tournamentSliver(context, "Upcoming", model.list) 
+                builder: (context, model, child) => tournamentSliver(context, str(context, "upcoming"), model.list) 
               ),
             ]
           );

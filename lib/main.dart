@@ -1,13 +1,15 @@
 import 'dart:core';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
+import 'package:esports/localizations.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/gamemodel.dart';
 import 'package:esports/model/matchmodel.dart';
 import 'package:esports/model/tournamentmodel.dart';
-import 'package:esports/matchestab.dart';
-import 'package:esports/tournamentstab.dart';
+import 'package:esports/tabs/matchestab.dart';
+import 'package:esports/tabs/tournamentstab.dart';
 
 void main() => runApp(
   MultiProvider(
@@ -33,6 +35,16 @@ class EsportsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  EsportsLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  const Locale('en', 'US'), // English
+                  const Locale('fr', 'FR'), // French
+                ],
       title: 'Esports',
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -60,6 +72,9 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
 
   // Tab index
   int _index = 0;
+
+  // i18n String getter
+  String str(String key) => EsportsLocalizations.of(context).get(key);
 
   // Models getters
   GameModel get games => Provider.of<GameModel>(context, listen: false);
@@ -124,7 +139,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
               children: <Widget>[
                 Icon(Icons.compare_arrows, size: 16),
                 SizedBox(width: 8,),
-                Text("Matches"),
+                Text(str("matches")),
               ],
             )),
             Tab(child: Row(
@@ -132,7 +147,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
               children: <Widget>[
                 Icon(Icons.equalizer, size: 16,),
                 SizedBox(width: 8,),
-                Text("Tournaments"),
+                Text(str("tournaments")),
               ],
             )),
           ],

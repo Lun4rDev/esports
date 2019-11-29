@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:esports/localizations.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/matchmodel.dart';
 import 'package:esports/model/gamemodel.dart';
-import 'package:esports/tournamentstab.dart';
+import 'package:esports/tabs/tournamentstab.dart';
 import 'package:esports/utils.dart';
 
 
 class MatchesTab extends StatelessWidget {
+  // i18n String getter
+  static String str(BuildContext context, String key) => EsportsLocalizations.of(context).get(key);
+
   // Models getters
   GameModel games(context) => Provider.of<GameModel>(context, listen: false);
   static MatchModel match(context) => Provider.of<MatchModel>(context, listen: false);
@@ -123,7 +127,7 @@ class MatchesTab extends StatelessWidget {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                          Text("Game ${game.position}"),
+                          Text("${str(context, "game")} ${game.position}"),
                           Text(game.finished  
                             ? _match.current.opponents.firstWhere((o) => o.opponent.id == game.winner.id).opponent.name
                             : game.beginAt != null ? API.localTime(game.beginAt) : "N/A")
@@ -162,10 +166,10 @@ class MatchesTab extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Row(
                       children: <Widget>[
-                        Text("Live", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                        Text(str(context, "live"), style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
                         FlatButton.icon(
                           icon: Icon(Icons.refresh, color: Colors.grey,),
-                          label: Text("Refresh", style: TextStyle(color: Colors.grey),),
+                          label: Text(str(context, "refresh"), style: TextStyle(color: Colors.grey),),
                           onPressed: liveMatches(context).fetch,
                         )
                       ],
@@ -192,7 +196,7 @@ class MatchesTab extends StatelessWidget {
                               elevation: 3,
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 10),
-                                width: 190,
+                                width: 175,
                                 child: Column(
                                   children: <Widget>[
                                     SizedBox(height: 10,),
@@ -213,7 +217,7 @@ class MatchesTab extends StatelessWidget {
                                                   softWrap: false,
                                                   maxLines: 1,
                                                   overflow: TextOverflow.fade,
-                                                  style: TextStyle(fontSize: 18,)),
+                                                  style: TextStyle(fontSize: 16,)),
                                               ),
                                             ],),
                                           ),
@@ -226,7 +230,7 @@ class MatchesTab extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ) else Utils.nothingBox("No matches")
+                        ) else Utils.nothingBox(str(context, "nomatches"))
                         else SizedBox(width: MediaQuery.of(context).size.width, child: Utils.loadingCircle) // If no matches yet (downloading)
                       ],
                     );
@@ -244,10 +248,10 @@ class MatchesTab extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: Row(
                         children: <Widget>[
-                          Text("Today", style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                          Text(str(context, "today"), style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
                           FlatButton.icon(
                             icon: Icon(Icons.refresh, color: Colors.grey,),
-                            label: Text("Refresh", style: TextStyle(color: Colors.grey),),
+                            label: Text(str(context, "refresh"), style: TextStyle(color: Colors.grey),),
                             onPressed: todayMatches(context).fetch,
                           )
                         ],
@@ -321,7 +325,7 @@ class MatchesTab extends StatelessWidget {
                   },
                   childCount: list.length
                 ),
-                ) : SliverToBoxAdapter(child: Utils.nothingBox("No matches"))
+                ) : SliverToBoxAdapter(child: Utils.nothingBox(str(context, "nomatches")))
                 : SliverToBoxAdapter(child: Utils.loadingCircle,)
             );},
               )
