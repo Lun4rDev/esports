@@ -21,13 +21,25 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
+  # Dependency injection and state management
   provider: ^3.1.0+1
+
+  # HTTP requests
   http: ^0.12.0+2
-  url_launcher: ^5.2.3
-  flutter_sticky_header: ^0.4.0
-  flutter_speed_dial: ^1.2.4
+
+  # Save key-value pairs on the device
   shared_preferences: ^0.5.4+5
 
+  # Open URLs, phone number, and email apps
+  url_launcher: ^5.2.3
+
+  # Sticky header as a sliver
+  flutter_sticky_header: ^0.4.0
+  
+  # Expandable floating action button
+  flutter_speed_dial: ^1.2.4
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2

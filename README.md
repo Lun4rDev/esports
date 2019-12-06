@@ -1,8 +1,12 @@
+
 # esports
 
-A Flutter project that uses the PandaScore API to show current and today eSport matches and tournaments. 
-This project uses the Provider state management package.
+A **Flutter** project that uses the **PandaScore API** to show current and today eSport matches and tournaments.
+
+This project uses the **Provider** dependency injection / state management package.
+
+![Screenshot](screenshots/1.png "Screenshot")
 
 ## Getting Started
 
-You only have to create a file in the assets folder named "apikey.txt" with your API key in it.
+You only need to create an assets folder with a file named "apikey.txt" containing your PandaScore API key.
