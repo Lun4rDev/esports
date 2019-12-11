@@ -10,6 +10,7 @@ import 'package:esports/model/matchmodel.dart';
 import 'package:esports/model/tournamentmodel.dart';
 import 'package:esports/tabs/matchestab.dart';
 import 'package:esports/tabs/tournamentstab.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() => runApp(
   MultiProvider(
@@ -37,19 +38,20 @@ class EsportsApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       localizationsDelegates: [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  EsportsLocalizations.delegate,
-                ],
-                supportedLocales: [
-                  const Locale('en', 'US'), // English
-                  const Locale('fr', 'FR'), // French
-                ],
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          EsportsLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', 'US'), // English
+          const Locale('fr', 'FR'), // French
+        ],
       title: 'Esports',
       theme: ThemeData(
         brightness: Brightness.dark,
         primaryColorDark: Color(0xFF00adb5),
         accentColor: Color(0xFF00adb5),
+        fontFamily: GoogleFonts.encodeSansSemiExpanded().fontFamily,
       ),
       home: EsportsPage(title: 'Esports'),
     );
