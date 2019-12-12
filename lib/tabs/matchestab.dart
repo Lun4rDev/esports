@@ -39,6 +39,7 @@ class MatchesTab extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       elevation: 4,
+      isScrollControlled: true,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
       builder: (BuildContext context){
         return Container(
@@ -49,6 +50,7 @@ class MatchesTab extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 GestureDetector(
+                  behavior: HitTestBehavior.translucent,
                   onTap: (){
                       Navigator.pop(context);
                       TournamentsTab.openTournament(context, _match.current.tournamentId);
@@ -58,7 +60,7 @@ class MatchesTab extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(_match.current.videogame.name, style: TextStyle(fontSize: 18),),
+                        Text(_match.current.videogame.name, style: TextStyle(fontSize: 26),),
                         SizedBox(height: 4,),
                         Text(_match.current.league.name,
                           softWrap: false, 
@@ -70,7 +72,11 @@ class MatchesTab extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: <Widget>[
-                      Text(_match.current.serie.name ?? _match.current.serie.fullName ?? "", style: TextStyle(fontSize: 14),),
+                      Text(_match.current.serie.name ?? _match.current.serie.fullName ?? "", 
+                        softWrap: false,
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(fontSize: 14),),
                       SizedBox(height: 4,),
                       Text(_match.current.tournament.name, style: TextStyle(fontSize: 14),),
                     ],),
@@ -79,14 +85,16 @@ class MatchesTab extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
-                        Text(API.localDate(_match.current.beginAt), 
-                          style: TextStyle(fontSize: 18)),
                         Text(API.localTime(_match.current.beginAt), 
                           style: TextStyle(fontSize: 26)),
+                        Text(API.localDate(_match.current.beginAt), 
+                          style: TextStyle(fontSize: 18)),
                       ],),
                   ),
                 ],)),
-                SizedBox(height: 26,),
+                SizedBox(height: 13,),
+                Divider(),
+                SizedBox(height: 13,),
                 if(_match.current.opponents.length == 2) Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -116,7 +124,9 @@ class MatchesTab extends StatelessWidget {
                     ),
                   ),
                 ],),
-                SizedBox(height: 26,),
+                SizedBox(height: 13,),
+                Divider(),
+                SizedBox(height: 13,),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -141,6 +151,7 @@ class MatchesTab extends StatelessWidget {
                 if(_match.current.liveUrl != null)
                   Container(
                     child: OutlineButton(
+                      borderSide: BorderSide(color: Theme.of(context).accentColor),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
                       child: Text(_match.current.liveUrl.replaceFirst("https://", "")),
                       onPressed: () => _launch(_match.current.liveUrl),

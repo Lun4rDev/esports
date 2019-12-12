@@ -46,7 +46,7 @@ class TournamentsTab extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                       ...[Utils.image(model.current.league.imageUrl, 72),
-                      SizedBox(width: 4,),],
+                      SizedBox(width: 8,),],
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +84,7 @@ class TournamentsTab extends StatelessWidget {
                 if(model.current.prizepool != null) 
                   ...[Text(model.current.prizepool, style: TextStyle(fontSize: 14),),
                   SizedBox(height: 4,)],
-                Divider(height: 32),
+                Divider(),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
