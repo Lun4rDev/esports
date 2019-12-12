@@ -231,7 +231,8 @@ class MatchesTab extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ) else Utils.nothingBox(str(context, "nomatches"))
+                        ) else SizedBox(width: MediaQuery.of(context).size.width, child: 
+                            Utils.nothingBox(str(context, "nomatches")))
                         else SizedBox(width: MediaQuery.of(context).size.width, child: Utils.loadingCircle) // If no matches yet (downloading)
                       ],
                     );

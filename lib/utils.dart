@@ -14,9 +14,14 @@ class Utils {
     alignment: Alignment.center,
     child: CircularProgressIndicator(strokeWidth: 1,),);
 
-  // Placeholder box when there is no data
+  // Placeholder widget when there is no data to be shown
   static Widget nothingBox(String label) => SizedBox( 
     width: double.maxFinite,
     height: 140, 
-    child: Center(child: Text(label, style: TextStyle(color: Colors.grey)),),);
+    child: Center(
+      child: Text(
+        label, 
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.grey)),),);
 }
