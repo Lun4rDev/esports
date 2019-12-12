@@ -51,7 +51,7 @@ class EsportsApp extends StatelessWidget {
         brightness: Brightness.dark,
         primaryColorDark: Color(0xFF00adb5),
         accentColor: Color(0xFF00adb5),
-        fontFamily: GoogleFonts.encodeSansSemiExpanded().fontFamily,
+        fontFamily: GoogleFonts.openSans().fontFamily,
       ),
       home: EsportsPage(title: 'Esports'),
     );

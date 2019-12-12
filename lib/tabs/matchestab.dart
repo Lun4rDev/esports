@@ -8,6 +8,7 @@ import 'package:esports/model/matchmodel.dart';
 import 'package:esports/model/gamemodel.dart';
 import 'package:esports/tabs/tournamentstab.dart';
 import 'package:esports/utils.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 class MatchesTab extends StatelessWidget {
@@ -166,7 +167,7 @@ class MatchesTab extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                     child: Row(
                       children: <Widget>[
-                        Text(str(context, "live"), style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                        Text(str(context, "live"), style: GoogleFonts.convergence(fontSize: 36, fontWeight: FontWeight.bold),),
                         FlatButton.icon(
                           icon: Icon(Icons.refresh, color: Colors.grey,),
                           label: Text(str(context, "refresh"), style: TextStyle(color: Colors.grey),),
@@ -248,7 +249,7 @@ class MatchesTab extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                       child: Row(
                         children: <Widget>[
-                          Text(str(context, "today"), style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+                          Text(str(context, "today"), style: GoogleFonts.convergence(fontSize: 36, fontWeight: FontWeight.bold),),
                           FlatButton.icon(
                             icon: Icon(Icons.refresh, color: Colors.grey,),
                             label: Text(str(context, "refresh"), style: TextStyle(color: Colors.grey),),

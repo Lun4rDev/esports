@@ -7,6 +7,7 @@ import 'package:esports/model/gamemodel.dart';
 import 'package:esports/model/tournamentmodel.dart';
 import 'package:esports/tabs/matchestab.dart';
 import 'package:esports/utils.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TournamentsTab extends StatelessWidget {
   // i18n String getter
@@ -150,7 +151,8 @@ class TournamentsTab extends StatelessWidget {
     return SliverStickyHeader(
       header: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Text(name, style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),),
+        child: Text(name,
+        style: GoogleFonts.convergence(fontSize: 36, fontWeight: FontWeight.bold),),
       ),
       sliver: tList.isNotEmpty ? list.isNotEmpty ? SliverList(
         delegate: SliverChildBuilderDelegate((context, index){
