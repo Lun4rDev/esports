@@ -435,7 +435,7 @@ class Serie {
   String season;
   String slug;
   int winnerId;
-  Null winnerType;
+  String winnerType;
   int year;
 
   Serie(

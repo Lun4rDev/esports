@@ -91,7 +91,7 @@ class TournamentsTab extends StatelessWidget {
                     children: <Widget>[
                       for(var roster in tournament(context).current.expectedRoster)
                         FlatButton(
-                          onPressed: () => openRoster(context, id, roster),
+                          onPressed: () => openRoster(context, roster),
                           padding: EdgeInsets.symmetric(horizontal: 8),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -196,7 +196,7 @@ class TournamentsTab extends StatelessWidget {
   }
 
   // Takes an ExpectedRoster, opens a bottom sheet displaying the roster data
-  static openRoster(BuildContext context, int tournamentId, ExpectedRoster roster) async {
+  static openRoster(BuildContext context, ExpectedRoster roster) async {
     //await Future.delayed(Duration.zero);
     showModalBottomSheet(
       context: context,
