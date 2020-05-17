@@ -1,49 +1,7 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 
-class API {
 
-  // Games
-  static const games = ["CS:GO", "LoL", "Dota 2", "Rocket League", "Overwatch", "PUBG"];
-
-  // Get token from the asset file
-  static get getToken async => await rootBundle.loadString("assets/apikey.txt");
-
-  // Access token
-  static String accessToken;
-
-  // Current date and time
-  static DateTime now = DateTime.now().toUtc();
-  
-  // Get today's date in the API format
-  static get todayRange => "${now.toIso8601String()},${now.add(Duration(days: 1)).toIso8601String()}";
-
-  // Get the local DateTime corresponding to an ISO-8601 formatted string
-  static DateTime localDateTime(String date) => DateTime.parse(date).toLocal();
-
-  static String localDate(String date) => localDateTime(date).toString().substring(0, 10);
-  static String localTime(String date) => localDateTime(date).toString().substring(11, 16);
-
-  // GET request to the API for a single object or a list
-  static Future<dynamic> getRequest(String url) async {
-    var res;
-    try {
-      final response =
-          await http.get(url, headers: {'Authorization': accessToken});
-      if (response.statusCode == 200) {
-        res = json.decode(response.body);
-      }
-    } catch (_) {}
-    return res;
-  }
-
-  // Initialize the access token
-  static Future<Null> initToken() async {
-    accessToken = "Bearer ${await getToken}";
-  } 
-}
-
+/// Contains the model classes representing the json objects from the API
+/// Base generated with https://javiercbk.github.io/json_to_dart/
 class Match {
   String beginAt;
   bool detailedStats;

@@ -1,17 +1,19 @@
 import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:esports/localizations.dart';
-import 'package:esports/model/model.dart';
+import 'package:esports/model/api.dart';
 import 'package:esports/model/gamemodel.dart';
 import 'package:esports/model/matchmodel.dart';
 import 'package:esports/model/tournamentmodel.dart';
-import 'package:esports/tabs/matchestab.dart';
-import 'package:esports/tabs/tournamentstab.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'package:esports/tabs/matches/matchestab.dart';
+import 'package:esports/tabs/tournaments/tournamentstab.dart';
 void main() => runApp(
   MultiProvider(
     providers: [

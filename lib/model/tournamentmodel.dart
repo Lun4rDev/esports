@@ -1,5 +1,14 @@
+import 'package:esports/model/gamemodel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:esports/model/model.dart';
+import 'package:esports/model/api.dart';
+import 'package:provider/provider.dart';
+
+// Models getters
+GameModel games(context) => Provider.of<GameModel>(context, listen: false);
+TournamentModel tournament(context) => Provider.of<TournamentModel>(context, listen: false);
+OngoingTournamentModel ongoingTournaments(context) => Provider.of<OngoingTournamentModel>(context, listen: false);
+UpcomingTournamentModel upcomingTournaments(context) => Provider.of<UpcomingTournamentModel>(context, listen: false);
 
 class TournamentModel with ChangeNotifier {
 
