@@ -18,17 +18,17 @@ void main() => runApp(
   MultiProvider(
     providers: [
       // Game model provider
-      ChangeNotifierProvider(builder: (context) => GameModel()),
+      ChangeNotifierProvider(create: (context) => GameModel()),
 
       // Match models providers
-      ChangeNotifierProvider(builder: (context) => MatchModel()),
-      ChangeNotifierProvider(builder: (context) => LiveMatchModel()),
-      ChangeNotifierProvider(builder: (context) => TodayMatchModel()),
+      ChangeNotifierProvider(create: (context) => MatchModel()),
+      ChangeNotifierProvider(create: (context) => LiveMatchModel()),
+      ChangeNotifierProvider(create: (context) => TodayMatchModel()),
 
       // Tournament models providers
-      ChangeNotifierProvider(builder: (context) => TournamentModel()),
-      ChangeNotifierProvider(builder: (context) => OngoingTournamentModel()),
-      ChangeNotifierProvider(builder: (context) => UpcomingTournamentModel()),
+      ChangeNotifierProvider(create: (context) => TournamentModel()),
+      ChangeNotifierProvider(create: (context) => OngoingTournamentModel()),
+      ChangeNotifierProvider(create: (context) => UpcomingTournamentModel()),
     ],
     child: EsportsApp()
   )

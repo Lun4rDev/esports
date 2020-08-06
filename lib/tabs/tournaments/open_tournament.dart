@@ -16,8 +16,9 @@ openTournament(BuildContext context, int id) async {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
       builder: (BuildContext context){
         return Consumer<TournamentModel>(
-          builder: (context, model, child) {  
-            var dateTime = API.localDateTime(tournament(context).current.beginAt);
+          builder: (context, model, child) {
+            if(model.current == null) return Center(child: CircularProgressIndicator());
+            var dateTime = API.localDateTime(model.current.beginAt);
             return Container(
             margin: EdgeInsets.all(16),
             child: model.current != null && model.current.id == id ? Column(

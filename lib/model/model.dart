@@ -28,7 +28,7 @@ class Match {
   MatchTournament tournament;
   int tournamentId;
   Videogame videogame;
-  Null videogameVersion;
+  Map<String, dynamic> videogameVersion;
   Opponent winner;
   int winnerId;
 

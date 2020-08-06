@@ -6,7 +6,16 @@ import 'package:flutter/services.dart' show rootBundle;
 class API {
 
   /// List of the supported games names
-  static const games = ["CS:GO", "LoL", "Dota 2", "Rocket League", "Overwatch", "PUBG"];
+  static const games = [
+    "CS:GO", 
+    "LoL", 
+    "Dota 2", 
+    "Rocket League", 
+    "Overwatch", 
+    "PUBG", 
+    "Call of Duty Modern Warfare", 
+    "Rainbow 6 Siege",
+  ];
 
   /// Access token
   static String accessToken;
