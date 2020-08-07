@@ -1,5 +1,6 @@
 import 'package:esports/model/api.dart';
 import 'package:esports/model/matchmodel.dart';
+import 'package:esports/tabs/tournaments/open_roster.dart';
 import 'package:esports/tabs/tournaments/open_tournament.dart';
 import 'package:esports/utils.dart';
 import 'package:flutter/material.dart';
@@ -73,28 +74,34 @@ openMatch(BuildContext context, int id) async {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                   Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Text(_match.current.opponents[0].opponent.name, 
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18)),
-                        SizedBox(height: 8),
-                        image(_match.current.opponents[0].opponent.imageUrl, 80),
-                      ],
+                    child: GestureDetector(
+                      onTap: () => downloadRoster(context, _match.current.tournamentId, _match.current.opponents[0].opponent.id),
+                      child: Column(
+                        children: <Widget>[
+                          Text(_match.current.opponents[0].opponent.name, 
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18)),
+                          SizedBox(height: 8),
+                          image(_match.current.opponents[0].opponent.imageUrl, 80),
+                        ],
+                      ),
                     ),
                   ),
                   Text("VS", 
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20)),
                   Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Text(_match.current.opponents[1].opponent.name, 
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 18)),
-                        SizedBox(height: 8),
-                        image(_match.current.opponents[1].opponent.imageUrl, 80),
-                      ],
+                    child: GestureDetector(
+                      onTap: () => downloadRoster(context, _match.current.tournamentId, _match.current.opponents[1].opponent.id),
+                      child: Column(
+                        children: <Widget>[
+                          Text(_match.current.opponents[1].opponent.name, 
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18)),
+                          SizedBox(height: 8),
+                          image(_match.current.opponents[1].opponent.imageUrl, 80),
+                        ],
+                      ),
                     ),
                   ),
                 ],),

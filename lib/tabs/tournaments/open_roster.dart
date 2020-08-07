@@ -1,14 +1,25 @@
 import 'package:esports/model/model.dart';
+import 'package:esports/model/tournamentmodel.dart';
 import 'package:esports/utils.dart';
 import 'package:flutter/material.dart';
 
+Future<ExpectedRoster> downloadRoster(
+  BuildContext context, 
+  int tournamentId, 
+  int rosterId) async {
+    await tournament(context).fetch(tournamentId);
+    var roster = tournament(context).current.expectedRoster.firstWhere(
+      (element) => element.team.id == rosterId);
+    if(roster != null) openRoster(context, roster);
+}
+
 // Takes an ExpectedRoster, opens a bottom sheet displaying the roster data
 openRoster(BuildContext context, ExpectedRoster roster) async {
-    //await Future.delayed(Duration.zero);
     showModalBottomSheet(
       context: context,
       elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
       builder: (context) {
         return Container(
           margin: EdgeInsets.all(16),
