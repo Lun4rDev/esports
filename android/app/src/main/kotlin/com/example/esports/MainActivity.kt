@@ -1,4 +1,4 @@
-package com.example.esports
+package com.mickaelhernandez.esports
 
 import android.os.Bundle
 import io.flutter.app.FlutterActivity

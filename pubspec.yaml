@@ -34,6 +34,9 @@ dependencies:
   # Open URLs, phone number, and email apps
   url_launcher: ^5.5.0
 
+  # Discover network connectivity state
+  connectivity: ^0.4.9
+
   # Sticky header as a sliver
   flutter_sticky_header: ^0.4.5
   
