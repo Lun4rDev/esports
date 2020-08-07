@@ -1,4 +1,5 @@
 import 'package:esports/tabs/matches/open_match.dart';
+import 'package:esports/tabs/tournaments/open_roster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';
@@ -136,17 +137,24 @@ class MatchesTab extends StatelessWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                              Column(children: <Widget>[
-                                Text(match.videogame.name, style: TextStyle(fontSize: 16),),
-                                Text(match.tournament.name, style: TextStyle(fontSize: 12),),
-                              ],),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                  Text(match.videogame.name, 
+                                    style: TextStyle(fontSize: 18),),
+                                  Text(match.tournament.name, style: TextStyle(fontSize: 12),),
+                                ],),
+                              ),
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: 8),
                                 width: 1,
-                                height: 32,
+                                height: 36,
                                 color: Theme.of(context).accentColor),
-                              Text(API.localTime(match.beginAt),
-                              style: TextStyle(fontSize: 24)),
+                              Expanded(
+                                child: Text(API.localTime(match.beginAt),
+                                style: TextStyle(fontSize: 26)),
+                              ),
                             ],),
                             SizedBox(height: 12,),
                             if(match.opponents.length == 2) Row(
