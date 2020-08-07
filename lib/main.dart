@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:core';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -74,6 +76,12 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   // Tabs controller
   TabController _tabController;
 
+  // Network state subscription
+  StreamSubscription subscription;
+
+  // Has access to Internet
+  bool hasInternet = true;
+
   // Tab index
   int _index = 0;
 
@@ -93,7 +101,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   // Initializes the providers data
   initApiData() async {
     await API.initToken();
-    await liveMatches.fetch();
+    liveMatches.fetch();
     await todayMatches.fetch();
     await ongoingTournaments.fetch();
     await upcomingTournaments.fetch();
@@ -106,6 +114,15 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
     _tabController.addListener((){
       if(_tabController.index != _index) setState((){ _index = _tabController.index; });
     });
+    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if(hasInternet && result == ConnectivityResult.none){
+        setState(() => hasInternet = false);
+      } 
+      else if(!hasInternet && result != ConnectivityResult.none){
+        setState(() => hasInternet = true);
+        initApiData();
+      }
+    });
     games.init();
     initApiData();
   }
@@ -117,7 +134,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
         return Scaffold(
         floatingActionButton: SpeedDial(
           closeManually: true,
-          child: Icon(Icons.games),
+          child: Icon(Icons.videogame_asset),
           children: [
             for(var game in API.games)
               SpeedDialChild(
@@ -157,11 +174,18 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           ],
         ),
         body: SafeArea(
-          child: TabBarView(
+          child: hasInternet ? TabBarView(
             controller: _tabController,
             children: [
               MatchesTab(),
               TournamentsTab()
+            ],
+          ) : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.portable_wifi_off),
+              SizedBox(width: MediaQuery.of(context).size.width),
+              Text(str("nointernet"))
             ],
           ),
         ),

@@ -17,6 +17,9 @@ class EsportsLocalizations {
 
   static Map<String, Map<String, String>> _localizedValues = {
     "en": {
+      // Main
+      "nointernet": "No Internet",
+
       // Matches
       "matches": "Matches",
       "nomatches": "No matches",
@@ -32,6 +35,9 @@ class EsportsLocalizations {
       "upcoming": "Upcoming",
     },
     "fr": {
+      // Main
+      "nointernet": "Internet inacessible",
+
       // Matches
       "matches": "Matchs",
       "nomatches": "Aucun match",
