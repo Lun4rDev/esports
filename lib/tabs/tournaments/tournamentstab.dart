@@ -30,7 +30,6 @@ class TournamentsTab extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () => openTournament(context, t.id),
                     child: Container(
-                      width: MediaQuery.of(context).size.width - 16,
                       margin: EdgeInsets.only(bottom: 8, left: 8, right: 8),
                       child: Card(
                         elevation: 3.3,
@@ -41,11 +40,18 @@ class TournamentsTab extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               image(t.league.imageUrl, 54),
-                              Column(
-                                children: <Widget>[
-                                  Text(t.videogame.name, style: TextStyle(fontSize: 18)),
-                                  Text(t.league.name, style: TextStyle(fontSize: 13)),
-                                ],
+                              Flexible(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(t.videogame.name, style: TextStyle(fontSize: 18)),
+                                      Text(t.league.name, style: TextStyle(fontSize: 13), 
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,),
+                                    ],
+                                  ),
+                                ),
                               ),
                               Text(API.localDate(t.beginAt), style: TextStyle(fontSize: 20),)
                             ],

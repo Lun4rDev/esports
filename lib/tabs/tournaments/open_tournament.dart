@@ -27,25 +27,31 @@ openTournament(BuildContext context, int id) async {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                      ...[image(model.current.league.imageUrl, 72),
-                      SizedBox(width: 8,),],
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    Flexible(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text(model.current.videogame.name,
-                            textAlign: TextAlign.start,
-                            style: TextStyle(fontSize: 20),),
-                          SizedBox(height: 4,),
-                          Text(model.current.league.name, 
-                            style: TextStyle(fontSize: 14),),
-                        ],
-                      ),
-                    ],),
+                        image(model.current.league.imageUrl, 72),
+                        SizedBox(width: 8,),
+                        Flexible(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(model.current.videogame.name,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(fontSize: 20),),
+                              SizedBox(height: 4,),
+                              Text(model.current.league.name, 
+                                style: TextStyle(fontSize: 14),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,),
+                            ],
+                          ),
+                        ),
+                      ],),
+                    ),
                     Column(
                       children: <Widget>[
                         Text(dateTime.year.toString(), 
