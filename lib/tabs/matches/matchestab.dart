@@ -136,49 +136,60 @@ class MatchesTab extends StatelessWidget {
                           children: <Widget>[
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: <Widget>[
                                   Text(match.videogame.name, 
-                                    style: TextStyle(fontSize: 18),),
+                                    style: TextStyle(fontSize: 16),),
                                   Text(match.tournament.name, style: TextStyle(fontSize: 12),),
                                 ],),
                               ),
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: 8),
                                 width: 1,
-                                height: 36,
+                                height: 32,
                                 color: Theme.of(context).accentColor),
                               Expanded(
                                 child: Text(API.localTime(match.beginAt),
                                 style: TextStyle(fontSize: 26)),
                               ),
                             ],),
-                            SizedBox(height: 12,),
+                            SizedBox(height: 16,),
                             if(match.opponents.length == 2) Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                               Expanded(
                                 child: Column(children: <Widget>[
+                                  if(match.opponents[0].opponent.imageUrl != null)
+                                  ...[
+                                    image(match.opponents[0].opponent.imageUrl, 54),
+                                    SizedBox(height: 4,),
+                                  ],
                                   Text(match.opponents[0].opponent.name, 
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: 18)),
-                                  ...[SizedBox(height: 4,),
-                                  image(match.opponents[0].opponent.imageUrl, 54)]
                                 ],),
                               ),
-                              Text("VS", 
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 24)),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text("VS", 
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 24)),
+                              ),
                               Expanded(
                                 child: Column(children: <Widget>[
+                                    if(match.opponents[1].opponent.imageUrl != null)
+                                    ...[
+                                      image(match.opponents[1].opponent.imageUrl, 54),
+                                      SizedBox(height: 4,),
+                                    ],
                                     Text(match.opponents[1].opponent.name, 
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 18)),
-                                    ...[SizedBox(height: 4,),
-                                    image(match.opponents[1].opponent.imageUrl, 54)]
+                                    
                                   ],
                                 ),
                               ),
