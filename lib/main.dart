@@ -134,7 +134,10 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
         return Scaffold(
         floatingActionButton: SpeedDial(
           closeManually: true,
-          child: Icon(Icons.videogame_asset),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          child: Image.asset("assets/icon.png",
+            width:  32,
+            height: 32,),
           children: [
             for(var game in API.games)
               SpeedDialChild(
