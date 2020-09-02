@@ -1,3 +1,4 @@
+[![Codemagic build status](https://api.codemagic.io/apps/5f4e97389c7311000ee8e544/5f4e97389c7311000ee8e543/status_badge.svg)](https://codemagic.io/apps/5f4e97389c7311000ee8e544/5f4e97389c7311000ee8e543/latest_build)
 
 # esports
 
