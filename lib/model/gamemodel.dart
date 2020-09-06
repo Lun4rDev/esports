@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:esports/model/api.dart';
+
+GameModel games(context) => Provider.of<GameModel>(context, listen: false);
 
 class GameModel with ChangeNotifier {
   

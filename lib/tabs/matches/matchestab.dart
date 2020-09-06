@@ -1,5 +1,5 @@
+import 'package:esports/model/gamemodel.dart';
 import 'package:esports/tabs/matches/open_match.dart';
-import 'package:esports/tabs/tournaments/open_roster.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:provider/provider.dart';

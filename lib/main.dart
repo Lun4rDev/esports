@@ -86,11 +86,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   String str(String key) => EsportsLocalizations.of(context).get(key);
 
   // Models getters
-  GameModel get games => Provider.of<GameModel>(context, listen: false);
-  LiveMatchModel get liveMatches => Provider.of<LiveMatchModel>(context, listen: false);
-  TodayMatchModel get todayMatches => Provider.of<TodayMatchModel>(context, listen: false);
-  OngoingTournamentModel get ongoingTournaments => Provider.of<OngoingTournamentModel>(context, listen: false);
-  UpcomingTournamentModel get upcomingTournaments => Provider.of<UpcomingTournamentModel>(context, listen: false);
+  GameModel get games => context.read<GameModel>();
+  LiveMatchModel get liveMatches => context.read<LiveMatchModel>();
+  TodayMatchModel get todayMatches => context.read<TodayMatchModel>();
+  OngoingTournamentModel get ongoingTournaments => context.read<OngoingTournamentModel>();
+  UpcomingTournamentModel get upcomingTournaments => context.read<UpcomingTournamentModel>();
 
   // Notifies all consumers
   notifyListeners() => <ChangeNotifier>[liveMatches, todayMatches, ongoingTournaments, upcomingTournaments].forEach((cn) => cn.notifyListeners());
@@ -151,11 +151,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                 _tabController.animateTo(index);
               } else {
                 if(index == 0){
-                  Provider.of<MatchModel>(context, listen: false).controller.animateTo(0,
+                  context.read<MatchModel>().controller.animateTo(0,
                     duration: Duration(milliseconds: 300),
                     curve: Curves.decelerate);
                 } else if(index == 1) {
-                  Provider.of<TournamentModel>(context, listen: false).controller.animateTo(0,
+                  context.read<MatchModel>().controller.animateTo(0,
                     duration: Duration(milliseconds: 300),
                     curve: Curves.decelerate);
                 }
@@ -199,5 +199,11 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
         ),
       );}
     );
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:esports/model/gamemodel.dart';
 import 'package:esports/tabs/tournaments/open_tournament.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
