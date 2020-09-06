@@ -23,7 +23,7 @@ dependencies:
     sdk: flutter
 
   # Dependency injection and state management
-  provider: ^4.3.1
+  provider: ^4.3.2+2
 
   # HTTP requests
   http: ^0.12.2
@@ -35,10 +35,10 @@ dependencies:
   url_launcher: ^5.5.0
 
   # Discover network connectivity state
-  connectivity: ^0.4.9
+  connectivity: ^0.4.9+2
 
   # Sticky header as a sliver
-  flutter_sticky_header: ^0.4.5
+  flutter_sticky_header: ^0.5.0
   
   # Expandable floating action button
   flutter_speed_dial: ^1.2.5
@@ -46,9 +46,15 @@ dependencies:
   # download and cache Google Fonts
   google_fonts: ^1.1.0
   
+  # keep network images in cache
+  cached_network_image: ^2.3.1
+  
+  # shimmer animation
+  shimmer: ^1.1.1
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.3
+  #cupertino_icons: ^1.0.0
 
 dev_dependencies:
   flutter_test:
