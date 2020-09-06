@@ -82,9 +82,6 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   // Has access to Internet
   bool hasInternet = true;
 
-  // Tab index
-  int _index = 0;
-
   // i18n String getter
   String str(String key) => EsportsLocalizations.of(context).get(key);
 
@@ -111,9 +108,6 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
-    _tabController.addListener((){
-      if(_tabController.index != _index) setState((){ _index = _tabController.index; });
-    });
     subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if(hasInternet && result == ConnectivityResult.none){
         setState(() => hasInternet = false);
@@ -153,8 +147,19 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           controller: _tabController,
           onTap: (int index) {
             setState(() {
-              _index = index;
-              _tabController.animateTo(index);
+              if(_tabController.index != index){
+                _tabController.animateTo(index);
+              } else {
+                if(index == 0){
+                  Provider.of<MatchModel>(context, listen: false).controller.animateTo(0,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.decelerate);
+                } else if(index == 1) {
+                  Provider.of<TournamentModel>(context, listen: false).controller.animateTo(0,
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.decelerate);
+                }
+              }
             });
           },
           tabs: <Widget>[
