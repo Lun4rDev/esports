@@ -1,6 +1,9 @@
 # API Key
 /assets/apikey.txt
 
+# Key properties
+/android/key.properties
+
 # Miscellaneous
 *.class
 *.log
