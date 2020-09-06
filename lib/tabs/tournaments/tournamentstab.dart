@@ -71,16 +71,17 @@ class TournamentsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return // TOURNAMENTS TAB
-          CustomScrollView(
-            slivers: [
-              Consumer<OngoingTournamentModel>(
-                builder: (context, model, child) => tournamentSliver(context, str(context, "ongoing"), model.list) 
-              ),
-              Consumer<UpcomingTournamentModel>(
-                builder: (context, model, child) => tournamentSliver(context, str(context, "upcoming"), model.list) 
-              ),
-            ]
-          );
+    // TOURNAMENTS TAB
+    return CustomScrollView(
+      controller: Provider.of<TournamentModel>(context, listen: false).controller,
+      slivers: [
+        Consumer<OngoingTournamentModel>(
+          builder: (context, model, child) => tournamentSliver(context, str(context, "ongoing"), model.list) 
+        ),
+        Consumer<UpcomingTournamentModel>(
+          builder: (context, model, child) => tournamentSliver(context, str(context, "upcoming"), model.list) 
+        ),
+      ]
+    );
   }
 }

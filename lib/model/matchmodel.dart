@@ -1,4 +1,5 @@
 import 'package:esports/model/gamemodel.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/api.dart';
@@ -29,6 +30,8 @@ class MatchModel with ChangeNotifier {
     current = Match.fromJson(await API.getRequest(matchUrl(id)));
     notifyListeners();
   }
+
+  final controller = ScrollController();
 }
 class LiveMatchModel with ChangeNotifier {
   // API URL for live matches

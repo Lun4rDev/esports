@@ -18,6 +18,7 @@ class MatchesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
+      controller: Provider.of<MatchModel>(context, listen: false).controller,
       slivers: [
           // LIVE SECTION
           SliverStickyHeader(

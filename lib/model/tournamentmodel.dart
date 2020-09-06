@@ -1,4 +1,5 @@
 import 'package:esports/model/gamemodel.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:esports/model/model.dart';
 import 'package:esports/model/api.dart';
@@ -29,6 +30,8 @@ class TournamentModel with ChangeNotifier {
     current = Tournament.fromJson(await API.getRequest(tournamentUrl(id)));
     notifyListeners();
   }
+
+  final controller = ScrollController();
 }
 
 class OngoingTournamentModel with ChangeNotifier {
