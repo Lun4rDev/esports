@@ -21,13 +21,13 @@ openRoster(BuildContext context, ExpectedRoster roster) async {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.0))),
       builder: (context) {
-        return TournamentSheet(roster);
+        return RosterSheet(roster);
       }
     );
   }
 
-class TournamentSheet extends StatelessWidget {
-  const TournamentSheet(this.roster, {Key key}) : super(key: key);
+class RosterSheet extends StatelessWidget {
+  const RosterSheet(this.roster, {Key key}) : super(key: key);
 
   final ExpectedRoster roster;
   @override
