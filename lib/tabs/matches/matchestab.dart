@@ -117,8 +117,8 @@ class MatchesTab extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                        Text("PAST", style: TextStyle(color: model.past ? Colors.white : Colors.grey[600]),),
-                        Text("COMING", style: TextStyle(color: model.past ? Colors.grey[600] : Colors.white)),
+                        Text(str(context, "past").toUpperCase(), style: TextStyle(color: model.past ? Colors.white : Colors.grey[600]),),
+                        Text(str(context, "coming").toUpperCase(), style: TextStyle(color: model.past ? Colors.grey[600] : Colors.white)),
                     ],),),
                     IconButton(
                       padding: EdgeInsets.zero,
@@ -182,6 +182,12 @@ class MatchesTab extends StatelessWidget {
                                   Text(match.opponents[0].opponent.name, 
                                   textAlign: TextAlign.center,
                                   style: TextStyle(fontSize: 18)),
+                                  if(model.past)
+                                  ...[
+                                    SizedBox(height: 4,),
+                                    Text(match.results[0].score.toString(),
+                                      style: TextStyle(fontSize: 20)),
+                                  ],
                                 ],),
                               ),
                               Padding(
@@ -200,7 +206,12 @@ class MatchesTab extends StatelessWidget {
                                     Text(match.opponents[1].opponent.name, 
                                       textAlign: TextAlign.center,
                                       style: TextStyle(fontSize: 18)),
-                                    
+                                    if(model.past)
+                                    ...[
+                                      SizedBox(height: 4,),
+                                      Text(match.results[1].score.toString(),
+                                        style: TextStyle(fontSize: 20)),
+                                    ],
                                   ],
                                 ),
                               ),

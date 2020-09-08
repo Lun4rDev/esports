@@ -80,6 +80,7 @@ class TodayMatchModel with ChangeNotifier {
     list.clear();
     notifyListeners();
     list = (await MatchModel.getMatches(todayMatchesUrl))..removeWhere((match) => match.opponents.length < 2);
+    if(past) list = list.reversed.toList();
     notifyListeners();
   }
 }

@@ -19,11 +19,14 @@ class EsportsLocalizations {
     "en": {
       // Main
       "nointernet": "No Internet",
+      "refresh" : "Refresh",
+      "past": "Past",
+      "coming": "Coming",
 
       // Matches
       "matches": "Matches",
       "nomatches": "No matches",
-      "refresh" : "Refresh",
+      
       "live": "Live",
       "today": "Today",
       "game": "Game",
@@ -40,11 +43,13 @@ class EsportsLocalizations {
     "fr": {
       // Main
       "nointernet": "Internet inacessible",
-
+      "refresh" : "Rafraîchir",
+      "past": "Past",
+      "coming": "Coming",
+      
       // Matches
       "matches": "Matchs",
       "nomatches": "Aucun match",
-      "refresh" : "Rafraîchir",
       "live": "Direct",
       "today": "Aujourd'hui",
       "game": "Partie",
