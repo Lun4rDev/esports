@@ -50,11 +50,30 @@ class LiveMatchModel with ChangeNotifier {
 
 class TodayMatchModel with ChangeNotifier {
 
-  // API URL for today matches
-  static final todayMatchesUrl = "https://api.pandascore.co/matches/upcoming?sort=begin_at&range[begin_at]=${API.todayRange}";
-
   // Today matches
   List<Match> list = [];
+
+  // Is showing past games of the day
+  bool past = false;
+
+  /// Current date and time
+  static DateTime get _now => DateTime.now().toUtc();
+
+  /// Get today's date in the API format
+  static get _pastRange => "${_now.subtract(Duration(days: 1)).toIso8601String()},${_now.toIso8601String()}";
+
+  /// Get today's date in the API format
+  static get _comingRange => "${_now.toIso8601String()},${_now.add(Duration(days: 1)).toIso8601String()}";
+
+  // API URL for today matches
+  get todayMatchesUrl => 
+    "https://api.pandascore.co/matches/${past ? "past" : "upcoming"}"
+    "?sort=begin_at&range[begin_at]=${past ? _pastRange : _comingRange}";
+
+  void toggleMode() {
+    past = !past;
+    fetch();
+  }
 
   // Get today matches from the API
   Future fetch() async {

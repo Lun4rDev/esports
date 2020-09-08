@@ -110,9 +110,19 @@ class MatchesTab extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     Text(str(context, "today"), style: GoogleFonts.convergence(fontSize: 36, fontWeight: FontWeight.bold),),
-                    FlatButton.icon(
+                    SizedBox(width: 8,),
+                    FlatButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: () => model.toggleMode(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                        Text("PAST", style: TextStyle(color: model.past ? Colors.white : Colors.grey[600]),),
+                        Text("COMING", style: TextStyle(color: model.past ? Colors.grey[600] : Colors.white)),
+                    ],),),
+                    IconButton(
+                      padding: EdgeInsets.zero,
                       icon: Icon(Icons.refresh, color: Colors.grey,),
-                      label: Text(str(context, "refresh"), style: TextStyle(color: Colors.grey),),
                       onPressed: todayMatches(context).fetch,
                     )
                   ],

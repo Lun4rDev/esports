@@ -20,12 +20,6 @@ class API {
   /// Access token
   static String accessToken;
 
-  /// Current date and time
-  static DateTime get _now => DateTime.now().toUtc();
-  
-  /// Get today's date in the API format
-  static get todayRange => "${_now.toIso8601String()},${_now.add(Duration(days: 1)).toIso8601String()}";
-
   /// Get the local DateTime corresponding to an ISO-8601 formatted string
   static DateTime localDateTime(String date) => DateTime.parse(date).toLocal();
 
