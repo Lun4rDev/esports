@@ -39,9 +39,9 @@ class RosterSheet extends StatelessWidget {
         children: <Widget>[
         image(roster.team.imageUrl, 80),
         SizedBox(height: 4),
-        Text(roster.team.name, style: TextStyle(fontSize: 24)),
+        Text(roster.team.name ?? "", style: TextStyle(fontSize: 24)),
         SizedBox(height: 26, child: Divider()),
-        SingleChildScrollView(
+        roster.players.isEmpty ? Text(str(context, "noroster")) : SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(children: <Widget>[
             for(var player in roster.players)

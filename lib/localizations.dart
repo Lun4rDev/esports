@@ -33,6 +33,9 @@ class EsportsLocalizations {
       "notournament": "No tournaments",
       "ongoing":  "Ongoing",
       "upcoming": "Upcoming",
+
+      // Roster
+      "noroster": "No roster found",
     },
     "fr": {
       // Main
@@ -51,6 +54,9 @@ class EsportsLocalizations {
       "notournament": "Aucun tournoi",
       "ongoing":  "En cours",
       "upcoming": "Prochainement",
+
+      // Roster
+      "noroster": "Pas d'information d'équipe",
     },
   };
 

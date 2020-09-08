@@ -101,7 +101,7 @@ class TournamentSheet extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           image(roster.team.imageUrl, 50),
-                          Text(roster.team.name)
+                          Text(roster.team.name ?? "")
                         ],
                       ),
                     ),
