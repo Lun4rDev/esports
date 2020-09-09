@@ -6,17 +6,14 @@ A **Flutter** project that uses the **PandaScore API** to show current and today
 
 This project uses the **Provider** dependency injection / state management package.
 
-<table>
-    <tr>
-        <td><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-matches.png" width="288" height="512"></td>
-        <td><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-match.png" width="288" height="512"></td>
-        <td><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-tournaments.png" width="288" height="512"></td>
-        <td><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-tournament.png" width="288" height="512"></td>
-        <td><img src="android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-roster.png" width="288" height="512"></td>
-    </tr>
-</table>
+<div class="table-wrapper" markdown="block" style="overflow-x: scroll;">
 
 
+![Matches](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-matches.png  "Matches") | ![Match](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-match.png  "Match") | ![Tournaments](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-tournaments.png  "Tournaments") | ![Tournament](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-tournament.png  "Tournament") |  ![Roster](android/fastlane/metadata/android/en-US/images/phoneScreenshots/Nexus%206P-roster.png  "Roster") |
+|---|---|---|---|---|
+
+
+</div>
 
 ## Getting Started
 
