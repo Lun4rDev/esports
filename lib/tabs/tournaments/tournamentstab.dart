@@ -15,12 +15,12 @@ class TournamentsTab extends StatelessWidget {
   List<Tournament> ft(context, List<Tournament> list) => List.from(list)..removeWhere((tn) => !games(context).list.contains(tn.videogame.name));
 
   // Returns a sliver with a header and a list of tournaments
-  SliverStickyHeader tournamentSliver(BuildContext context, String name, List<dynamic> tList){
+  SliverStickyHeader tournamentSliver(BuildContext context, String key, List<dynamic> tList){
     var list = ft(context, tList);
     return SliverStickyHeader(
       header: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-        child: Text(name,
+        child: Text(str(context, key),
         style: GoogleFonts.convergence(fontSize: 36, fontWeight: FontWeight.bold),),
       ),
       sliver: tList.isNotEmpty ? list.isNotEmpty ? SliverList(
@@ -29,6 +29,7 @@ class TournamentsTab extends StatelessWidget {
             return Padding(
                   padding: const EdgeInsets.only(bottom: 4),
                   child: GestureDetector(
+                    key: ValueKey("$key\Tournament$index"),
                     onTap: () => openTournament(context, t.id),
                     child: Container(
                       margin: EdgeInsets.only(bottom: 8, left: 8, right: 8),
@@ -77,10 +78,10 @@ class TournamentsTab extends StatelessWidget {
       controller: Provider.of<TournamentModel>(context, listen: false).controller,
       slivers: [
         Consumer<OngoingTournamentModel>(
-          builder: (context, model, child) => tournamentSliver(context, str(context, "ongoing"), model.list) 
+          builder: (context, model, child) => tournamentSliver(context, "ongoing", model.list) 
         ),
         Consumer<UpcomingTournamentModel>(
-          builder: (context, model, child) => tournamentSliver(context, str(context, "upcoming"), model.list) 
+          builder: (context, model, child) => tournamentSliver(context, "upcoming", model.list) 
         ),
       ]
     );

@@ -163,7 +163,9 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
             });
           },
           tabs: <Widget>[
-            Tab(child: Row(
+            Tab(
+              key: ValueKey("matchesTab"),
+              child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.compare_arrows, size: 16),
@@ -171,7 +173,9 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
                 Text(str("matches")),
               ],
             )),
-            Tab(child: Row(
+            Tab(
+              key: ValueKey("tournamentsTab"),
+              child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(Icons.equalizer, size: 16,),

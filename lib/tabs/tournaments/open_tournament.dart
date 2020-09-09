@@ -95,6 +95,8 @@ class TournamentSheet extends StatelessWidget {
                 children: <Widget>[
                   for(var roster in tournament(context).current.expectedRoster)
                     FlatButton(
+                      key: ValueKey(
+                        "roster${tournament(context).current.expectedRoster.indexOf(roster)}"),
                       onPressed: () => openRoster(context, roster),
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Column(

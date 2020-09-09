@@ -129,9 +129,11 @@ class MatchesTab extends StatelessWidget {
                 ),
             ),
             sliver: model.list.isNotEmpty ? list.isNotEmpty ? SliverList(
+              key: ValueKey("todayMatchesList"),
               delegate: SliverChildBuilderDelegate((context, index) {
               var match = list[index];
                 return GestureDetector(
+                  key: ValueKey("todayMatch$index"),
                   onTap: () => openMatch(context, match.id),
                   child: Container(
                     width: MediaQuery.of(context).size.width - 16,
