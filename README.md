@@ -1,10 +1,10 @@
 # esports
 
-[![Codemagic build status](https://api.codemagic.io/apps/5f4e97389c7311000ee8e544/5f4e97389c7311000ee8e543/status_badge.svg)](https://codemagic.io/apps/5f4e97389c7311000ee8e544/5f4e97389c7311000ee8e543/latest_build)
+![Codemagic build status](https://api.codemagic.io/apps/5f4e97389c7311000ee8e544/5f4e97389c7311000ee8e543/status_badge.svg)
 
-A **Flutter** project that uses the **PandaScore API** to show current and today eSport matches and tournaments.
+A [Flutter](https://flutter.dev/) project that uses the [PandaScore API](https://pandascore.co/) to show current and today eSport matches and tournaments.
 
-This project uses the **Provider** dependency injection / state management package.
+This project uses the [provider](https://pub.dev/packages/provider) state management package.
 
 
 
