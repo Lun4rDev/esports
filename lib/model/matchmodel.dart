@@ -39,11 +39,16 @@ class LiveMatchModel with ChangeNotifier {
   // Live matches
   List<Match> list = [];
 
+  // Is a request currently running
+  bool fetching = true;
+
   // Get live matches from the API
   Future fetch() async {
     list.clear();
+    fetching = true;
     notifyListeners();
     list = await MatchModel.getMatches(liveMatchesUrl);
+    fetching = false;
     notifyListeners();
   }
 }

@@ -43,7 +43,7 @@ class MatchesTab extends StatelessWidget {
                 var list = fm(context, model.list);
                 return Row(
                 children: <Widget>[
-                  if(model.list.isNotEmpty) 
+                  if(!model.fetching) 
                     if(list.isNotEmpty)
                     for(Match match in fm(context, list)) 
                   Padding(
