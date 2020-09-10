@@ -6,11 +6,7 @@ import 'package:test/test.dart';
 import 'dart:io';
 
 void main() {
-  group('Counter App', () {
-    // First, define the Finders and use them to locate widgets from the
-    // test suite. Note: the Strings provided to the `byValueKey` method must
-    // be the same as the Strings we used for the Keys in step 1.
-    //final counterTextFinder = find.byValueKey('counter');
+  group('eSports', () {
 
     FlutterDriver driver;
 
@@ -32,6 +28,10 @@ void main() {
       // Matches tab
       await screenshot(driver, config, 'matches');
 
+      await driver.tap(find.byValueKey("gamesButton"));
+      await screenshot(driver, config, 'gamesButton');
+      await driver.tap(find.byValueKey("gamesButton"));
+
       // Match sheet
       await driver.tap(find.byValueKey("todayMatch0"));
       await screenshot(driver, config, 'match');
@@ -50,7 +50,7 @@ void main() {
       await screenshot(driver, config, 'roster');
 
       //expect(await driver.getText(find.text(str(context, "today"))), "0");
-    });
+    }, timeout: Timeout(Duration(minutes: 1)));
   });
 }
 

@@ -130,6 +130,7 @@ class _EsportsPageState extends State<EsportsPage> with SingleTickerProviderStat
           closeManually: true,
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           child: Image.asset("assets/icon.png",
+            key: ValueKey("gamesButton"),
             width:  32,
             height: 32,),
           children: [
